@@ -13,7 +13,6 @@ Where: Online (Discord)
 What: We discussed how to design the GUI (user interface) to make it user friendly and easy to understand. We assigned roles for each team member to make more efficient the progress. 
 
 Meeting 2:
-
 Date: 3/16/2026
 Who: All members. Oliver, Amina, Michael, Mackenzie
 Where: Online (Discord)
