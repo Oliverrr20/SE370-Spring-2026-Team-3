@@ -1,20 +1,22 @@
-User Stories.
+User Stories and Sprint Summaries.
 
 Sprint 1:
-- As a user I would like ...
-- As a nurse I would like ...
-- As a member of the administration team I would like...
-
+- As a user, I would like my information to be protected.
+- As a nurse, I would like to see what rooms are available.
+- As a member of the administration team, I would like to be able to assign nurses/doctors to patients.
+Summary: This sprint was focused on planning out what our application should do.
 Sprint 2:
 - As a nurse I would like ...
 - As a new member of the hospital staff team I would like...
 - As a patient I would like ....
 
-
+Summary: 
 Sprint 3:
+- As a user, I want a visually appealing and easy-to-use interface.
+- As an administrator, I want my application's information to be stored securely in a database for easy access.
+- As a nurse, I want information updated quickly as I am in a fast-paced environment.
 
 
-
-
+Summary: This sprint is focused on allocating work and beginning coding our project.
 Sprint 4:
 
