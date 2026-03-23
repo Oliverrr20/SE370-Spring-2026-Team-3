@@ -16,7 +16,7 @@ Sprint 3:
 - As an administrator, I want my application's information to be stored securely in a database so that there is easy access to data.
 - As a nurse, I want information updated quickly because I am in a fast-paced environment.
 - As user, I want my password to be protected so that no one can access my account.
-
+- As administrator, I want to control user roles so that only authorized users access certain functions.
 Summary: This sprint is focused on allocating work and beginning coding our project.
 Sprint 4:
 
