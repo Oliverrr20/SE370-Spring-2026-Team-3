@@ -4,19 +4,24 @@ Sprint 1:
 - As a user, I would like my information to be protected so that no one can steal sensitive patient data.
 - As a nurse, I would like to see what rooms are available so that I can quickly assign a patient to a room.
 - As a member of the administration team, I would like to be able to assign nurses/doctors to patients so that the hospital runs smoothly.
-Summary: This sprint was focused on planning out what our application should do.
-Sprint 2:
-- As a nurse I would like ...
-- As a new member of the hospital staff team I would like...
-- As a patient I would like ....
 
-Summary: 
+Summary: This sprint was focused on planning out what our application should do.
+
+Sprint 2:
+- As a nurse I would like to have an efficient room management system so that I can make changes to the room status any time.
+- As a new member of the hospital staff team I would like to log into a system where the main interface is easy to understand, so that I can learn quicker. 
+- As a patient I would like to be assigned efficiently into a room, so that I dont have to wait too much. 
+
+Summary: This sprint was focused on giving ideas of how our project should be to give the user the best experience. 
+
 Sprint 3:
 - As a user, I want a visually appealing and easy-to-use interface so that using the computer makes my job easier.
 - As an administrator, I want my application's information to be stored securely in a database so that there is easy access to data.
 - As a nurse, I want information updated quickly because I am in a fast-paced environment.
 - As user, I want my password to be protected so that no one can access my account.
 - As administrator, I want to control user roles so that only authorized users access certain functions.
+
 Summary: This sprint is focused on allocating work and beginning coding our project.
+
 Sprint 4:
 
