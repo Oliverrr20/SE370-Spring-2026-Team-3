@@ -17,3 +17,9 @@ Date: 3/16/2026
 Who: All members. Oliver, Amina, Michael, Mackenzie
 Where: Online (Discord)
 What: We all shared how are we doing with our assigned part of the project, we discussed possible changes to some parts, like to the GUI user interface style. 
+
+Meeting 3:
+Date: 3/23/2026
+Who: 
+Where: In-class
+What: We shared when we were going to work on our assigned parts. GUI (Oliver) is making coding progress.
