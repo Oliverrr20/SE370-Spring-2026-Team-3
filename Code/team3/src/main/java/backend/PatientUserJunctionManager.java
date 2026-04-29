@@ -4,14 +4,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PatientUserJunctionManager {
-    //store junction
-    private Map<Integer, PatientUserJunction> PatientUserJunction = new HashMap<>();
+
+    private Map<Integer, PatientUserJunction> patientUserJunctions = new HashMap<>();
+
+    public void addAssignment(PatientUserJunction assignment) {
+        if (assignment == null) {
+            throw new RuntimeException("Assignment cannot be null");
+        }
+
+        patientUserJunctions.put(assignment.getPatientUserJunctionID(), assignment);
+    }
+
+    public PatientUserJunction getAssignment(int id) {
+        if (!patientUserJunctions.containsKey(id)) {
+            throw new RuntimeException("Assignment not found");
+        }
+
+        return patientUserJunctions.get(id);
+    }
+
+    public void removeAssignment(int id) {
+        patientUserJunctions.remove(id);
+    }
 }
-public boolean canViewPatient(int userID, int patientID){
-    for(PatientUserJunction j : PatientUserJunction.value()) {
-        if(j.UserID == userID && j.PatientID) {
-            return true;
-        }
-        }
-    return false;
-        }

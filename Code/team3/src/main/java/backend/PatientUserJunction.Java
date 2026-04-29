@@ -6,26 +6,38 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-class PatientUserJunction {
-    //variables
+public class PatientUserJunction {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int PatientUserJunctionID; //roomID
-    Long PatientID; //roomnum
-    Long UserID;
-    String AssignmentTime; //room type
-    String AssignmentEnd; //occupied or available or close
-    //empty constructor
-    public PatientUserJunction (){}
-    //construtor with variables
+    int PatientUserJunctionID;
+
+    int PatientID;
+    int UserID;
+    String AssignmentTime;
+    String AssignmentEnd;
+
+    public PatientUserJunction() {
+    }
+
     public PatientUserJunction(int pi, int ui) {
-        PatientID = pi; 
+        PatientID = pi;
         UserID = ui;
     }
+
     public int getPatientUserJunctionID() {
         return PatientUserJunctionID;
     }
+
     public void setPatientUserJunctionID(int pujID) {
         PatientUserJunctionID = pujID;
+    }
+
+    public int getPatientID() {
+        return PatientID;
+    }
+
+    public int getUserID() {
+        return UserID;
     }
 }

@@ -4,5 +4,7 @@ module hospital_room_manager {
     requires jakarta.persistence;
 
     opens hospital_room_manager to javafx.fxml;
+    opens backend to jakarta.persistence;
+
     exports hospital_room_manager;
 }
