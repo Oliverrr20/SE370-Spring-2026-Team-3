@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="hospital_room_manager.RoomDashboardController"
+            styleClass="page-background">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="15" styleClass="top-nav">
+            <Label text="Hospital Room Manager" styleClass="nav-title"/>
+            <Button text="Room Dashboard" onAction="#goToDashboard"/>
+            <Button text="Assign Patient" onAction="#goToAssignment"/>
+            <Button text="Patient Info" onAction="#goToPatientInfo"/>
+            <Button text="Logout" onAction="#logout"/>
+        </HBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="transparent-scroll">
+            <VBox spacing="20">
+                <Label text="Room Dashboard" styleClass="main-title"/>
+
+                <HBox spacing="15">
+                    <VBox styleClass="summary-card">
+                        <Label text="Rooms in total"/>
+                        <Label fx:id="totalRoomsLabel" styleClass="summary-number"/>
+                    </VBox>
+
+                    <VBox styleClass="summary-card">
+                        <Label text="Available"/>
+                        <Label fx:id="availableRoomsLabel" styleClass="summary-number"/>
+                    </VBox>
+
+                    <VBox styleClass="summary-card">
+                        <Label text="Occupied"/>
+                        <Label fx:id="occupiedRoomsLabel" styleClass="summary-number"/>
+                    </VBox>
+
+                    <VBox styleClass="summary-card">
+                        <Label text="Closed"/>
+                        <Label fx:id="closedRoomsLabel" styleClass="summary-number"/>
+                    </VBox>
+                </HBox>
+
+                <Label text="Rooms" styleClass="section-title"/>
+
+                <FlowPane fx:id="roomCardsPane" hgap="15" vgap="15"/>
+            </VBox>
+        </ScrollPane>
+    </center>
+
+    <padding>
+        <Insets top="20" right="25" bottom="25" left="25"/>
+    </padding>
+</BorderPane>
