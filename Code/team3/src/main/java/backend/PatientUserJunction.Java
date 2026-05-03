@@ -40,4 +40,20 @@ public class PatientUserJunction {
     public int getUserID() {
         return UserID;
     }
+
+    public String getAssignmentTime() {
+        return AssignmentTime;
+    }
+
+    public void setAssignmentTime(String assignmentTime) {
+        AssignmentTime = assignmentTime;
+    }
+
+    public String getAssignmentEnd() {
+        return AssignmentEnd;
+    }
+
+    public void setAssignmentEnd(String assignmentEnd) {
+        AssignmentEnd = assignmentEnd;
+    }
 }
