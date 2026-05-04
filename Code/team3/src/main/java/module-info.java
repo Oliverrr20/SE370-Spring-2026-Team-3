@@ -4,7 +4,6 @@ module hospital_room_manager {
     requires jakarta.persistence;
     requires jbcrypt;
     requires java.sql;
-    requires com.mysql.cj;
 
     opens hospital_room_manager to javafx.fxml;
     opens backend to jakarta.persistence;

@@ -2,6 +2,7 @@ package backend;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.mindrot.jbcrypt.BCrypt;
 
 public class ClientManager {
@@ -23,7 +24,7 @@ public class ClientManager {
             throw new RuntimeException("Client cannot be null");
         }
 
-        Clients.put(client.UserID, client);
+        Clients.put(client.getClientID(), client);
     }
 
     public Client authenticate(String phone, String pass) {
