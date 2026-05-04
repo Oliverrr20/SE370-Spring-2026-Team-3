@@ -42,9 +42,9 @@ public class Client {
         Pass = pass;    //set password
     }
     public int getClientID() {
-        return ClientID;
+        return UserID;
     }
-    public void setClientID(int cID) {
-        ClientID = cID;
+    public void setClientID(int uID) {
+        UserID = uID;
     }
 }
