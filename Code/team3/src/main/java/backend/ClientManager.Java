@@ -2,6 +2,7 @@ package backend;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.mindrot.jbcrypt.BCrypt;
 
 public class ClientManager {
 
@@ -27,8 +28,11 @@ public class ClientManager {
 
     public Client authenticate(String phone, String pass) {
         for (Client c : Clients.values()) {
-            if (c.Phone != null && c.Pass != null && c.Phone.equals(phone) && c.Pass.equals(pass)) {
+            if (c.Phone != null && c.Pass != null && c.Phone.equals(phone)) {
                 return c;
+            }
+            if (BCrypt.checkpw(pass, c.Pass)) {
+                return c;   // login success
             }
         }
 

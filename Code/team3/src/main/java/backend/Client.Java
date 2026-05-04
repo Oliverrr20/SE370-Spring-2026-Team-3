@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
 public class Client {
@@ -29,7 +30,9 @@ public class Client {
         UserRole = ur; //set user role
         DOB = dob; //set dob
         Phone = p;     //set phone
-        Pass = pass;    //set password HASH LATER
+
+        //hashing!
+        Pass = BCrypt.hashpw(pass, BCrypt.gensalt());
     }
     //constructors with optional field
     public Client(String fn, String ln, String ur, String dob, String p, String e, String pass) {
@@ -39,12 +42,17 @@ public class Client {
         DOB = dob; //set dob
         Phone = p;     //set z
         Email = e; //set email
-        Pass = pass;    //set password
+
+        //hasing!
+        Pass = BCrypt.hashpw(pass, BCrypt.gensalt());    //set password
     }
     public int getClientID() {
         return UserID;
     }
     public void setClientID(int uID) {
         UserID = uID;
+    }
+    public String getPass() {
+        return Pass;
     }
 }

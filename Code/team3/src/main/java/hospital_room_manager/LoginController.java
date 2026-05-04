@@ -7,6 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+//import backend.Client;
+//import backend.ClientManager;
+
 public class LoginController{
 
     @FXML
@@ -15,6 +18,8 @@ public class LoginController{
     private PasswordField passwordField;
     @FXML
     private Label messageLabel;
+    
+    //private ClientManager clientRepo;
 
     @FXML
     private void handleLogin() throws IOException{

@@ -3,6 +3,8 @@ package backend;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 class PatientManager {
     //store patients
     private Map<Integer, Patient> Patients = new HashMap<>();
@@ -32,5 +34,17 @@ class PatientManager {
             throw new RuntimeException("Cannot delete patient assigned to a room");
         }
         Patients.remove(id); //remove them
+    }
+    public Patient authenticate(String phone, String pass) {
+        for (Patient p : Patients.values()) {
+            if (p.Phone != null && p.Pass != null && p.Phone.equals(phone)) {
+                return p;
+            }
+            if (BCrypt.checkpw(pass, p.Pass)) {
+                return p;   // login success
+            }
+        }
+
+        return null;
     }
 }

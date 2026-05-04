@@ -1,5 +1,7 @@
 package backend;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,8 +32,10 @@ public class Patient {
         LastName = ln; //set last name
         DOB = dob; //set dob
         Phone = p;  //set phone number
-        Pass = pass; //set password HASH LATER
         RoomID = null; //no room at the start
+
+        //hashing!
+        Pass = BCrypt.hashpw(pass, BCrypt.gensalt());
     }
     //constructors with optional fields variations
     public Patient(String fn, String ln, String g, String dob, String p, String e, String pass) {
@@ -41,8 +45,10 @@ public class Patient {
         DOB = dob; //set dob
         Phone = p;  //set phone number
         Email = e;
-        Pass = pass; //set password HASH LATER
         RoomID = null; //no room at the start
+
+        //hashing!
+        Pass = BCrypt.hashpw(pass, BCrypt.gensalt());
     }
     //getters and setters for later types
     public void addPhone(String p){
@@ -56,5 +62,8 @@ public class Patient {
     }
     public void setPatientID(int patID) {
         PatientID = patID;
+    }
+    public String getPass() {
+        return Pass;
     }
 }
