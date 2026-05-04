@@ -6,29 +6,66 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-class Room {
-    //variables
+public class Room {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    int RoomID; //roomID
-    int RoomNumber; //roomnum
-    int FloorNumber;
-    String RoomType; //room type
-    String RoomStatus; //occupied or available or closed
-    String LastUpdated;
-    //empty constructor
-    public Room (){}
-    //construtor with variables
-    public Room(int rn, int fn, String type) {
-        RoomNumber = rn; //set the num
-        FloorNumber = fn;
-        RoomType = type; //set type
-        RoomStatus = "Available"; //at the start the rooms available
+    private int RoomID;
+
+    private int RoomNumber;
+    private int FloorNumber;
+    private String RoomType;
+    private String RoomStatus;
+    private String LastUpdated;
+
+    public Room() {
     }
-    public int getRoomID() {
+
+    public Room(int rn, int fn, String type){
+        RoomNumber = rn;
+        FloorNumber = fn;
+        RoomType = type;
+        RoomStatus = "Available";
+    }
+    public int getRoomID(){
         return RoomID;
     }
-    public void setRoomID(int roomID) {
-        this.RoomID = roomID;
+    public void setRoomID(int roomID){
+        RoomID = roomID;
+    }
+
+    public int getRoomNumber(){
+        return RoomNumber;
+    }
+    public void setRoomNumber(int roomNumber){
+        RoomNumber = roomNumber;
+    }
+
+    public int getFloorNumber(){
+        return FloorNumber;
+    }
+    public void setFloorNumber(int floorNumber){
+        FloorNumber = floorNumber;
+    }
+
+    public String getRoomType(){
+        return RoomType;
+    }
+    public void setRoomType(String roomType){
+        RoomType = roomType;
+    }
+
+    public String getRoomStatus(){
+        return RoomStatus;
+    }
+    public void setRoomStatus(String roomStatus){
+        RoomStatus = roomStatus;
+    }
+
+    public String getLastUpdated(){
+        return LastUpdated;
+    }
+    public void setLastUpdated(String lastUpdated){
+        LastUpdated = lastUpdated;
     }
 }
