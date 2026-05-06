@@ -10,20 +10,23 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="hospital_room_manager.LoginController"
+            fx:controller="hospital_room_manager.NewAccountController"
             styleClass="page-background">
 
     <center>
         <VBox alignment="CENTER" spacing="18" styleClass="login-card">
             <Label text="Hospital Room Manager" styleClass="main-title"/>
-            <Label text="Staff Login" styleClass="section-title"/>
+            <Label text="New User" styleClass="section-title"/>
 
+            <TextField fx:id="phoneField" promptText="First Name" maxWidth="300"/>
+            <TextField fx:id="phoneField" promptText="Last Name" maxWidth="300"/>
+            <TextField fx:id="phoneField" promptText="User Role" maxWidth="300"/>
+            <TextField fx:id="phoneField" promptText="Date of Birth" maxWidth="300"/>
             <TextField fx:id="phoneField" promptText="Phone Number" maxWidth="300"/>
+            <TextField fx:id="phoneField" promptText="Email" maxWidth="300"/>
             <PasswordField fx:id="passwordField" promptText="Password" maxWidth="300"/>
 
-            <Button text="Login" onAction="#handleLogin" styleClass="primary-button" maxWidth="300"/>
-
-            <Button text="Create an account" onAction="#handleNewAccount" styleClass="primary-button" maxWidth="300"/>
+            <Button text="Create Account" onAction="#accountCreated" styleClass="primary-button" maxWidth="300"/>
             
             <Label fx:id="messageLabel" styleClass="error-label"/>
         </VBox>

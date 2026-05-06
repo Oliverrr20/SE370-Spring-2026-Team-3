@@ -33,4 +33,8 @@ public class LoginController{
 
         App.setRoot("Room_Dashboard");
     }
+    @FXML
+    private void handleNewAccount() throws IOException {
+        App.setRoot("new_account");
+    }
 }

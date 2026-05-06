@@ -86,6 +86,28 @@
 .room-title {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
+    -fx-text-fill: #344767;
+}
+
+.room-name {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f2a44;
+}
+
+.room-floor {
+    -fx-font-size: 13px;
+    -fx-text-fill: #344767;
+}
+
+.room-type {
+    -fx-font-size: 13px;
+    -fx-text-fill: #344767;
+}
+
+.room-staus {
+    -fx-font-size: 13px;
+    -fx-text-fill: #344767;
 }
 
 .available-room {

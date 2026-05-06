@@ -41,6 +41,7 @@
                 <columns>
                     <TableColumn fx:id="nameColumn" text="Patient Name" prefWidth="170"/>
                     <TableColumn fx:id="genderColumn" text="Gender" prefWidth="100"/>
+                    <TableColumn fx:id="dobColumn" text="Date of Birth" prefWidth="140"/>
                     <TableColumn fx:id="phoneColumn" text="Phone" prefWidth="140"/>
                     <TableColumn fx:id="emailColumn" text="Email" prefWidth="210"/>
                     <TableColumn fx:id="admissionColumn" text="Admission Date" prefWidth="140"/>

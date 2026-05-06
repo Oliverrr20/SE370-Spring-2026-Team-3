@@ -56,12 +56,16 @@ public class RoomDashboardController{
     }
 
     private VBox createRoomCard(GuiRoom room){
-        Label roomNumber = new Label("Room " + room.getRoomNumber());
+        Label roomNumber = new Label("Room: " + room.getRoomNumber());
         roomNumber.getStyleClass().add("room-name");
 
-        Label floor = new Label("Floor " + room.getFloorNumber());
-        Label type = new Label("Type " + room.getRoomType());
-        Label status = new Label("Status " + room.getRoomStatus());
+        Label floor = new Label("Floor: " + room.getFloorNumber());
+        floor.getStyleClass().add("room-floor");
+
+        Label type = new Label("Type: " + room.getRoomType());
+        type.getStyleClass().add("room-type");
+        Label status = new Label("Status: " + room.getRoomStatus());
+        status.getStyleClass().add("room-staus");
 
         VBox card = new VBox(8, roomNumber, floor, type, status);
         card.getStyleClass().add("room-card");

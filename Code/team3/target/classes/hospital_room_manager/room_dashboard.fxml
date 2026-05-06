@@ -31,22 +31,22 @@
 
                 <HBox spacing="15">
                     <VBox styleClass="summary-card">
-                        <Label text="Rooms in total"/>
+                        <Label text="Rooms in total" styleClass="summary-text"/>
                         <Label fx:id="totalRoomsLabel" styleClass="summary-number"/>
                     </VBox>
 
                     <VBox styleClass="summary-card">
-                        <Label text="Available"/>
+                        <Label text="Available" styleClass="summary-text"/>
                         <Label fx:id="availableRoomsLabel" styleClass="summary-number"/>
                     </VBox>
 
                     <VBox styleClass="summary-card">
-                        <Label text="Occupied"/>
+                        <Label text="Occupied" styleClass="summary-text"/>
                         <Label fx:id="occupiedRoomsLabel" styleClass="summary-number"/>
                     </VBox>
 
                     <VBox styleClass="summary-card">
-                        <Label text="Closed"/>
+                        <Label text="Closed" styleClass="summary-text"/>
                         <Label fx:id="closedRoomsLabel" styleClass="summary-number"/>
                     </VBox>
                 </HBox>

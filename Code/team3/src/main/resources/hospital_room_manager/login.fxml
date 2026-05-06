@@ -23,6 +23,8 @@
 
             <Button text="Login" onAction="#handleLogin" styleClass="primary-button" maxWidth="300"/>
 
+            <Button text="Create an account" onAction="#handleNewAccount" styleClass="primary-button" maxWidth="300"/>
+            
             <Label fx:id="messageLabel" styleClass="error-label"/>
         </VBox>
     </center>
