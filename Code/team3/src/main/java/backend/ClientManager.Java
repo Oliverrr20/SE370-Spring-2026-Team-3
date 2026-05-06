@@ -1,7 +1,5 @@
 package backend;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,7 +31,6 @@ public class ClientManager {
             throw new RuntimeException("Client cannot be null");
         }
 
-        Clients.put(client.getClientID(), client);
         String sql = "INSERT INTO Client "
                 + "(FirstName, LastName, UserRole, DOB, Phone, Email, Pass, LastUpdated) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";

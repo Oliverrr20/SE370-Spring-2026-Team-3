@@ -18,12 +18,12 @@
             <Label text="Hospital Room Manager" styleClass="main-title"/>
             <Label text="New User" styleClass="section-title"/>
 
-            <TextField fx:id="phoneField" promptText="First Name" maxWidth="300"/>
-            <TextField fx:id="phoneField" promptText="Last Name" maxWidth="300"/>
-            <TextField fx:id="phoneField" promptText="User Role" maxWidth="300"/>
-            <TextField fx:id="phoneField" promptText="Date of Birth" maxWidth="300"/>
+            <TextField fx:id="firstField" promptText="First Name" maxWidth="300"/>
+            <TextField fx:id="lastField" promptText="Last Name" maxWidth="300"/>
+            <TextField fx:id="roleField" promptText="User Role" maxWidth="300"/>
+            <TextField fx:id="dobField" promptText="Date of Birth" maxWidth="300"/>
             <TextField fx:id="phoneField" promptText="Phone Number" maxWidth="300"/>
-            <TextField fx:id="phoneField" promptText="Email" maxWidth="300"/>
+            <TextField fx:id="emailField" promptText="Email" maxWidth="300"/>
             <PasswordField fx:id="passwordField" promptText="Password" maxWidth="300"/>
 
             <Button text="Create Account" onAction="#accountCreated" styleClass="primary-button" maxWidth="300"/>
