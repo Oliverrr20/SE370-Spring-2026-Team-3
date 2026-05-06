@@ -75,11 +75,6 @@
     -fx-text-fill: #2563eb;
 }
 
-.summary-text{
-    -fx-font-size: 14px;
-    -fx-text-fill: black;
-}
-
 .room-card {
     -fx-background-color: white;
     -fx-padding: 15px;
@@ -88,22 +83,31 @@
     -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.10), 8, 0, 0, 3);
 }
 
-.room-name {
-    -fx-text-fill:black;
+.room-title {
     -fx-font-size: 18px;
     -fx-font-weight: bold;
+    -fx-text-fill: #344767;
 }
-.room-floor{
-    -fx-text-fill:black;
+
+.room-name {
     -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1f2a44;
 }
-.room-type{
-    -fx-text-fill:black;
-    -fx-font-size: 16px;
+
+.room-floor {
+    -fx-font-size: 13px;
+    -fx-text-fill: #344767;
 }
-.room-status{
-    -fx-text-fill:black;
-    -fx-font-size: 16px;
+
+.room-type {
+    -fx-font-size: 13px;
+    -fx-text-fill: #344767;
+}
+
+.room-staus {
+    -fx-font-size: 13px;
+    -fx-text-fill: #344767;
 }
 
 .available-room {
