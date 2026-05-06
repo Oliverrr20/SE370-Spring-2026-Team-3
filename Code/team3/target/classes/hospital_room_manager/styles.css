@@ -75,6 +75,11 @@
     -fx-text-fill: #2563eb;
 }
 
+.summary-text{
+    -fx-text-fill: black;
+    -fx-adjust-up: -7px;
+}
+
 .room-card {
     -fx-background-color: white;
     -fx-padding: 15px;
