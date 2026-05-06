@@ -11,6 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Spinner?>
 
 <StackPane xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
@@ -79,13 +80,13 @@
 
     <Label text="Add New Room" styleClass="popup-title"/>
 
-    <TextField fx:id="roomNumberField" promptText="Room Number" maxWidth="250"/>
-    <TextField fx:id="floorField" promptText="Floor Number" maxWidth="250"/>
+    <Spinner fx:id="roomNumberField" maxWidth="250" />
+    <Spinner fx:id="floorField" maxWidth="250" />
     <TextField fx:id="typeField" promptText="Room Type" maxWidth="250"/>
 
     <HBox spacing="10">
         <Button text="Cancel" onAction="#closePopup" styleClass="cancel-button"/>
-        <Button text="Add Room" onAction="#closePopup" styleClass="primary-button"/>
+        <Button text="Add Room" onAction="#onSaveRoomClicked" styleClass="primary-button"/>
     </HBox>
 </VBox>
 </StackPane>
