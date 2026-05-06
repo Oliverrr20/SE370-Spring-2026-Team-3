@@ -15,6 +15,23 @@
     -fx-text-fill: #344767;
 }
 
+.popup-card {
+    -fx-background-color: white;
+    -fx-padding: 25;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0, 0, 5);
+}
+
+.popup-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.cancel-button {
+    -fx-background-color: #ccc;
+    -fx-text-fill: black;
+}
+
 .login-card {
     -fx-background-color: white;
     -fx-padding: 40px;

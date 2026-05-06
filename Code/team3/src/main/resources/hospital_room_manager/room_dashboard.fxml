@@ -6,14 +6,17 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.control.TextField?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.171"
+<StackPane xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="hospital_room_manager.RoomDashboardController"
             styleClass="page-background">
-
+<BorderPane styleClass="page-background">
     <top>
         <HBox alignment="CENTER_LEFT" spacing="15" styleClass="top-nav">
             <Label text="Hospital Room Manager" styleClass="nav-title"/>
@@ -52,7 +55,7 @@
                 </HBox>
 
                 <Label text="Rooms" styleClass="section-title"/>
-
+                <Button text="+ Add Room" onAction="#openPopup"/>
                 <FlowPane fx:id="roomCardsPane" hgap="15" vgap="15"/>
             </VBox>
         </ScrollPane>
@@ -62,3 +65,27 @@
         <Insets top="20" right="25" bottom="25" left="25"/>
     </padding>
 </BorderPane>
+<Rectangle fx:id="overlay"
+           width="Infinity" height="Infinity"
+           visible="false"
+           style="-fx-fill: rgba(0,0,0,0.5);" />
+
+<!-- POPUP CARD -->
+<VBox fx:id="popupPane"
+      visible="false"
+      spacing="15"
+      alignment="CENTER"
+      styleClass="popup-card">
+
+    <Label text="Add New Room" styleClass="popup-title"/>
+
+    <TextField fx:id="roomNumberField" promptText="Room Number" maxWidth="250"/>
+    <TextField fx:id="floorField" promptText="Floor Number" maxWidth="250"/>
+    <TextField fx:id="typeField" promptText="Room Type" maxWidth="250"/>
+
+    <HBox spacing="10">
+        <Button text="Cancel" onAction="#closePopup" styleClass="cancel-button"/>
+        <Button text="Add Room" onAction="#closePopup" styleClass="primary-button"/>
+    </HBox>
+</VBox>
+</StackPane>

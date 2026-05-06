@@ -20,6 +20,8 @@ public class RoomDashboardController{
     private Label closedRoomsLabel;
     @FXML
     private FlowPane roomCardsPane;
+    @FXML
+    private VBox popupPane;
 
     @FXML
     private void initialize(){
@@ -78,6 +80,15 @@ public class RoomDashboardController{
             card.getStyleClass().add("closed-room");
         }
         return card;
+    }
+
+    @FXML
+    private void openPopup() throws IOException{
+        popupPane.setVisible(true);
+    }
+    @FXML
+    private void closePopup() {
+        popupPane.setVisible(false);
     }
 
     @FXML
