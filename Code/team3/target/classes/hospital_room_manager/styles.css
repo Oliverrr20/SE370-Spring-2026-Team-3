@@ -168,3 +168,12 @@
 .table-view {
     -fx-background-radius: 10px;
 }
+.summary-text{
+    -fx-text-fill: black;
+}
+.input-error{
+    -fx-border-color: red;
+    -fx-border-width: 2px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+}

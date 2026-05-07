@@ -2,39 +2,43 @@ package hospital_room_manager;
 
 import java.io.IOException;
 
+import backend.Room;
+import backend.RoomManager;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
 public class RoomDashboardController {
+    @FXML private Label totalRoomsLabel;
+    @FXML private Label availableRoomsLabel;
+    @FXML private Label occupiedRoomsLabel;
+    @FXML private Label closedRoomsLabel;
+    @FXML private FlowPane roomCardsPane;
+    @FXML private Rectangle overlay;
+    @FXML private VBox popupPane;
+    @FXML private Spinner<Integer> roomNumberField;
+    @FXML private Spinner<Integer> floorField;
+    @FXML private TextField typeField;
+    @FXML private Label messageLabel;
+    private RoomManager roomManager = new RoomManager();
 
-    @FXML
-    private Label totalRoomsLabel;
-    @FXML
-    private Label availableRoomsLabel;
-    @FXML
-    private Label occupiedRoomsLabel;
-    @FXML
-    private Label closedRoomsLabel;
-    @FXML
-    private FlowPane roomCardsPane;
-    @FXML
-    private Rectangle overlay;
-    @FXML
-    private VBox popupPane;
-    @FXML
-    private TextField roomNumberField;
-    @FXML
-    private TextField floorField;
-    @FXML
-    private TextField typeField;
+    @FXML private void initialize() {
+        roomNumberField.setValueFactory(
+            new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1)
+        );
 
-    @FXML
-    private void initialize() {
+        floorField.setValueFactory(
+            new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 0)
+        );
+
+        roomNumberField.setEditable(true);
+        floorField.setEditable(true);
         closePopup();
         loadDashboard();
     }
@@ -110,9 +114,7 @@ public class RoomDashboardController {
 
         return card;
     }
-
-    @FXML
-    private void openPopup() {
+    @FXML private void openPopup() {
         if (overlay != null) {
             overlay.setVisible(true);
             overlay.setManaged(true);
@@ -123,9 +125,7 @@ public class RoomDashboardController {
             popupPane.setManaged(true);
         }
     }
-
-    @FXML
-    private void closePopup() {
+    @FXML private void closePopup() {
         if (overlay != null) {
             overlay.setVisible(false);
             overlay.setManaged(false);
@@ -137,35 +137,53 @@ public class RoomDashboardController {
         }
 
         if (roomNumberField != null) {
-            roomNumberField.clear();
+            roomNumberField.getValueFactory().setValue(1);
         }
 
         if (floorField != null) {
-            floorField.clear();
+            floorField.getValueFactory().setValue(0);
         }
 
         if (typeField != null) {
             typeField.clear();
         }
     }
+    @FXML private void onSaveRoomClicked() throws IOException {
+        if (roomNumberField == null ||
+            floorField == null ||
+            typeField.getText().isBlank()) {
+            return;
+        }
+       
+        int roomNumber = roomNumberField.getValue();
+        int floorNumber = floorField.getValue();
 
-    @FXML
-    private void goToDashboard() throws IOException {
+
+        Room newRoom = new Room(
+            roomNumber,
+            floorNumber,
+            typeField.getText()
+        );
+
+        roomManager.addRoom(newRoom);
+
+        closePopup();
         loadDashboard();
     }
 
-    @FXML
-    private void goToAssignment() throws IOException {
+    @FXML private void goToDashboard() throws IOException {
+        loadDashboard();
+    }
+
+    @FXML private void goToAssignment() throws IOException {
         App.setRoot("patient_assignment");
     }
 
-    @FXML
-    private void goToPatientInfo() throws IOException {
+    @FXML private void goToPatientInfo() throws IOException {
         App.setRoot("patient_info");
     }
 
-    @FXML
-    private void logout() throws IOException {
+    @FXML private void logout() throws IOException {
         LoginSession.logout();
         App.setRoot("login");
     }
