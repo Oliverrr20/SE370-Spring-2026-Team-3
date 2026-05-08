@@ -183,6 +183,9 @@ public class RoomDashboardController {
         App.setRoot("patient_info");
     }
 
+    @FXML private void goToAddPatient() throws IOException {
+        App.setRoot("add_patient");
+    }
     @FXML private void logout() throws IOException {
         LoginSession.logout();
         App.setRoot("login");

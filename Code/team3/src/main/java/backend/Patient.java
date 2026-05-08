@@ -1,7 +1,5 @@
 package backend;
 
-import org.mindrot.jbcrypt.BCrypt;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +18,6 @@ public class Patient{
     private String DOB;
     private String Phone;
     private String Email;
-    private String Pass;
     private String AdmissionDate;
     private String LeaveDate;
     private String LastUpdated;
@@ -29,16 +26,15 @@ public class Patient{
     public Patient(){
     }
 
-    public Patient(String fn, String ln, String dob, String p, String pass) {
+    public Patient(String fn, String ln, String dob, String p) {
         FirstName = fn;
         LastName = ln;
         DOB = dob;
         Phone = p;
         RoomID = null;
-        Pass = BCrypt.hashpw(pass, BCrypt.gensalt());
     }
 
-    public Patient(String fn, String ln, String g, String dob, String p, String e, String pass){
+    public Patient(String fn, String ln, String g, String dob, String p, String e){
         FirstName = fn;
         LastName = ln;
         Gender = g;
@@ -46,7 +42,6 @@ public class Patient{
         Phone = p;
         Email = e;
         RoomID = null;
-        Pass = BCrypt.hashpw(pass, BCrypt.gensalt());
     }
 
     public int getPatientID(){
@@ -96,13 +91,6 @@ public class Patient{
     }
     public void setEmail(String email){
         Email = email;
-    }
-
-    public String getPass(){
-        return Pass;
-    }
-    public void setPass(String pass){
-        Pass = pass;
     }
 
     public String getAdmissionDate(){

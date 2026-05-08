@@ -21,6 +21,7 @@
             <Button text="Room Dashboard" onAction="#goToDashboard"/>
             <Button text="Assign Patient" onAction="#goToAssignment"/>
             <Button text="Patient Info" onAction="#goToPatientInfo"/>
+            <Button text="+ Add patient" onAction="#goToAddPatient"/>
             <Button text="Logout" onAction="#logout"/>
         </HBox>
     </top>
