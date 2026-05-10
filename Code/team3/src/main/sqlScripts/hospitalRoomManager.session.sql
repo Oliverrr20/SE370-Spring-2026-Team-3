@@ -20,7 +20,6 @@ CREATE TABLE Patient(
     DOB DATE NOT NULL,
     Phone VARCHAR(20) NOT NULL,
     Email VARCHAR(255),
-    Pass VARCHAR(255) NOT NULL,
     AdmissionDate DATETIME NOT NULL,
     LeaveDate DATETIME,
     LastUpdated DATETIME,

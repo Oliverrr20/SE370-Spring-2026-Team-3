@@ -15,33 +15,20 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 
 public class RoomDashboardController {
-
-    @FXML
-    private Label totalRoomsLabel;
-    @FXML
-    private Label availableRoomsLabel;
-    @FXML
-    private Label occupiedRoomsLabel;
-    @FXML
-    private Label closedRoomsLabel;
-    @FXML
-    private FlowPane roomCardsPane;
-    @FXML
-    private Rectangle overlay;
-    @FXML
-    private VBox popupPane;
-    @FXML
-    private Spinner<Integer> roomNumberField;
-    @FXML
-    private Spinner<Integer> floorField;
-    @FXML
-    private TextField typeField;
+    @FXML private Label totalRoomsLabel;
+    @FXML private Label availableRoomsLabel;
+    @FXML private Label occupiedRoomsLabel;
+    @FXML private Label closedRoomsLabel;
+    @FXML private FlowPane roomCardsPane;
+    @FXML private Rectangle overlay;
+    @FXML private VBox popupPane;
+    @FXML private Spinner<Integer> roomNumberField;
+    @FXML private Spinner<Integer> floorField;
+    @FXML private TextField typeField;
     @FXML private Label messageLabel;
-
     private RoomManager roomManager = new RoomManager();
 
-    @FXML
-    private void initialize() {
+    @FXML private void initialize() {
         roomNumberField.setValueFactory(
             new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1)
         );
@@ -127,9 +114,7 @@ public class RoomDashboardController {
 
         return card;
     }
-
-    @FXML
-    private void openPopup() {
+    @FXML private void openPopup() {
         if (overlay != null) {
             overlay.setVisible(true);
             overlay.setManaged(true);
@@ -140,9 +125,7 @@ public class RoomDashboardController {
             popupPane.setManaged(true);
         }
     }
-
-    @FXML
-    private void closePopup() {
+    @FXML private void closePopup() {
         if (overlay != null) {
             overlay.setVisible(false);
             overlay.setManaged(false);
@@ -165,16 +148,16 @@ public class RoomDashboardController {
             typeField.clear();
         }
     }
-    @FXML
-    private void onSaveRoomClicked() throws IOException {
+    @FXML private void onSaveRoomClicked() throws IOException {
         if (roomNumberField == null ||
             floorField == null ||
             typeField.getText().isBlank()) {
             return;
         }
-        
+       
         int roomNumber = roomNumberField.getValue();
         int floorNumber = floorField.getValue();
+
 
         Room newRoom = new Room(
             roomNumber,
@@ -188,23 +171,22 @@ public class RoomDashboardController {
         loadDashboard();
     }
 
-    @FXML
-    private void goToDashboard() throws IOException {
+    @FXML private void goToDashboard() throws IOException {
         loadDashboard();
     }
 
-    @FXML
-    private void goToAssignment() throws IOException {
+    @FXML private void goToAssignment() throws IOException {
         App.setRoot("patient_assignment");
     }
 
-    @FXML
-    private void goToPatientInfo() throws IOException {
+    @FXML private void goToPatientInfo() throws IOException {
         App.setRoot("patient_info");
     }
 
-    @FXML
-    private void logout() throws IOException {
+    @FXML private void goToAddPatient() throws IOException {
+        App.setRoot("add_patient");
+    }
+    @FXML private void logout() throws IOException {
         LoginSession.logout();
         App.setRoot("login");
     }

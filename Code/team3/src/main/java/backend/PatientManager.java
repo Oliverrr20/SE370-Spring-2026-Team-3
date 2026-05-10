@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mindrot.jbcrypt.BCrypt;
-
 public class PatientManager {
 
     public void addPatient(Patient patient) {
@@ -17,8 +15,8 @@ public class PatientManager {
         }
 
         String sql = "INSERT INTO Patient "
-                + "(FirstName, LastName, Gender, DOB, Phone, Email, Pass, AdmissionDate, RoomID, LastUpdated) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, NOW())";
+                + "(FirstName, LastName, Gender, DOB, Phone, Email, AdmissionDate, LastUpdated)"
+                + "VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())";
 
         try (Connection connection = DatabaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -29,13 +27,12 @@ public class PatientManager {
             statement.setString(4, patient.getDOB());
             statement.setString(5, patient.getPhone());
             statement.setString(6, patient.getEmail());
-            statement.setString(7, patient.getPass());
 
-            if (patient.getRoomID() == null) {
-                statement.setNull(8, java.sql.Types.INTEGER);
-            } else {
-                statement.setInt(8, patient.getRoomID());
-            }
+            // if (patient.getRoomID() == null) {
+            //     statement.setNull(8, java.sql.Types.INTEGER);
+            // } else {
+            //     statement.setInt(8, patient.getRoomID());
+            // }
 
             statement.executeUpdate();
 
@@ -105,7 +102,7 @@ public class PatientManager {
         }
     }
 
-    public Patient authenticate(String phone, String pass) {
+    public boolean authenticate(String phone) {
         String sql = "SELECT * FROM Patient WHERE Phone = ?";
 
         try (Connection connection = DatabaseConnection.getConnection();
@@ -114,32 +111,11 @@ public class PatientManager {
             statement.setString(1, phone);
 
             try (ResultSet result = statement.executeQuery()) {
-                if (!result.next()) {
-                    return null;
-                }
-
-                Patient patient = mapPatient(result);
-                String savedPassword = patient.getPass();
-
-                if (savedPassword == null) {
-                    return null;
-                }
-
-                boolean passwordMatches;
-
-                if (savedPassword.startsWith("$2a$")
-                        || savedPassword.startsWith("$2b$")
-                        || savedPassword.startsWith("$2y$")) {
-                    passwordMatches = BCrypt.checkpw(pass, savedPassword);
-                } else {
-                    passwordMatches = savedPassword.equals(pass);
-                }
-
-                return passwordMatches ? patient : null;
+                return result.next() && result.getInt(1) > 0;
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to authenticate patient: " + e.getMessage(), e);
+            throw new RuntimeException("Unable to check phone number: " + e.getMessage(), e);
         }
     }
 
@@ -153,7 +129,6 @@ public class PatientManager {
         patient.setDOB(String.valueOf(result.getDate("DOB")));
         patient.setPhone(result.getString("Phone"));
         patient.setEmail(result.getString("Email"));
-        patient.setPass(result.getString("Pass"));
 
         if (result.getTimestamp("AdmissionDate") != null) {
             patient.setAdmissionDate(String.valueOf(result.getTimestamp("AdmissionDate")));

@@ -1,48 +1,42 @@
 package hospital_room_manager;
 
 import java.io.IOException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import backend.Client;
-import backend.ClientManager;
+import backend.Patient;
+import backend.PatientManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 
-public class NewAccountController {
+public class AddPatientController {
     @FXML private TextField firstField;
     @FXML private TextField lastField;
-    @FXML private ComboBox<String> roleBox;
+    @FXML private ComboBox<String> genderField;
     @FXML private DatePicker dobPicker;
     @FXML private TextField phoneField;
     @FXML private TextField emailField;
-    @FXML private PasswordField passwordField;
     @FXML private Label messageLabel;
-    private ClientManager clientManager = new ClientManager();
+    private PatientManager patientManager = new PatientManager();
 
     @FXML public void initialize() {
-        roleBox.getItems().addAll("Admin", "Nurse", "Doctor", "Staff");
+        genderField.getItems().addAll("Female", "Male", "Nonbinary", "Prefer Not To Say");
 
         firstField.textProperty().addListener((o, oldV, newV) -> clearInvalid(firstField));
         lastField.textProperty().addListener((o, oldV, newV) -> clearInvalid(lastField));
         phoneField.textProperty().addListener((o, oldV, newV) -> clearInvalid(phoneField));
         emailField.textProperty().addListener((o, oldV, newV) -> clearInvalid(emailField));
-        passwordField.textProperty().addListener((o, oldV, newV) -> clearInvalid(passwordField));
 
-        roleBox.valueProperty().addListener((o, oldV, newV) -> clearInvalid(roleBox));
+        genderField.valueProperty().addListener((o, oldV, newV) -> clearInvalid(genderField));
 
         dobPicker.valueProperty().addListener((o, oldV, newV) -> clearInvalid(dobPicker));
     }
 
-    @FXML private void accountCreated() throws IOException {
+    @FXML private void addPatient() throws IOException {
         boolean hasError = false;
-        boolean invalidPass = false;
 
         messageLabel.setText("");
 
@@ -56,8 +50,8 @@ public class NewAccountController {
             hasError = true;
         }
 
-        if (roleBox.getValue() == null) {
-            markInvalid(roleBox);
+        if (genderField.getValue() == null) {
+            markInvalid(genderField);
             hasError = true;
         }
 
@@ -78,45 +72,28 @@ public class NewAccountController {
             hasError = true;
         }
 
-        if (passwordField.getText().isBlank()) {
-            markInvalid(passwordField);
-            hasError = true;
-        } else{
-            Pattern pattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$");
-            Matcher matcher = pattern.matcher(passwordField.getText());
-            if (!(matcher.find())) {
-                markInvalid(passwordField);
-                invalidPass = true;
-                hasError = true;
-            }
-        }
-
         if (hasError) {
             messageLabel.setText("Please correct the highlighted fields.");
-            if(invalidPass){
-                messageLabel.setText("Password must contain 8 characters, one uppercase letter, one lowercase letter, one number and one special character.");
-            }
             return;
         }
 
-        if (clientManager.checkPhone(cleanedPhone)) {
+        if (patientManager.authenticate(cleanedPhone)) {
             markInvalid(phoneField);
             messageLabel.setText("Phone number already registered.");
             return;
         }
 
-        Client newClient = new Client(
+        Patient newPatient = new Patient(
             firstField.getText(),
             lastField.getText(),
-            roleBox.getValue(),
+            genderField.getValue(),
             dobPicker.getValue().toString(),
             cleanedPhone,
-            emailField.getText(),
-            passwordField.getText()
+            emailField.getText()
         );
 
-        clientManager.addClient(newClient);
-        App.setRoot("login");
+        patientManager.addPatient(newPatient);
+        App.setRoot("add_patient");
     }
     //for invalid field logic
     private void markInvalid(Control field) {
@@ -126,5 +103,24 @@ public class NewAccountController {
     }
     private void clearInvalid(Control field) {
         field.getStyleClass().remove("input-error");
+    }
+    @FXML private void goToDashboard() throws IOException {
+        App.setRoot("room_dashboard");
+    }
+
+    @FXML private void goToAssignment() throws IOException {
+        App.setRoot("patient_assignment");
+    }
+
+    @FXML private void goToPatientInfo() throws IOException {
+        App.setRoot("patient_info");
+    }
+
+    @FXML private void goToAddPatient() throws IOException {
+        App.setRoot("add_patient");
+    }
+    
+    @FXML private void logout() throws IOException {
+        App.setRoot("login");
     }
 }

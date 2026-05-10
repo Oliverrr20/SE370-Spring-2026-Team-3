@@ -118,6 +118,10 @@ public class PatientInfoController {
         App.setRoot("patient_info");
     }
 
+    @FXML private void goToAddPatient() throws IOException {
+        App.setRoot("add_patient");
+    }
+
     @FXML
     private void logout() throws IOException{
         App.setRoot("login");
