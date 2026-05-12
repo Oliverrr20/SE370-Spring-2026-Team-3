@@ -2,6 +2,10 @@ package hospital_room_manager;
 
 import java.io.IOException;
 
+import backend.Patient;
+import backend.PatientManager;
+import backend.Room;
+import backend.RoomManager;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,33 +20,36 @@ public class PatientInfoController {
     @FXML
     private TextField searchField;
     @FXML
-    private TableView<GuiPatient> patientTable;
+    private TableView<Patient> patientTable;
     @FXML
-    private TableColumn<GuiPatient, String> nameColumn;
+    private TableColumn<Patient, String> nameColumn;
     @FXML
-    private TableColumn<GuiPatient, String> genderColumn;
+    private TableColumn<Patient, String> genderColumn;
     @FXML
-    private TableColumn<GuiPatient,String> dobColumn;
+    private TableColumn<Patient,String> dobColumn;
     @FXML
-    private TableColumn<GuiPatient, String> phoneColumn;
+    private TableColumn<Patient, String> phoneColumn;
     @FXML
-    private TableColumn<GuiPatient, String> emailColumn;
+    private TableColumn<Patient, String> emailColumn;
     @FXML
-    private TableColumn<GuiPatient, String> admissionColumn;
+    private TableColumn<Patient, String> admissionColumn;
     @FXML
-    private TableColumn<GuiPatient, String> roomColumn;
+    private TableColumn<Patient, String> roomColumn;
     @FXML
     private Label selectedPatientLabel;
+
+    private final RoomManager roomManager = new RoomManager();
+    private final PatientManager patientManager = new PatientManager();
 
     @FXML
     private void initialize() {
         nameColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getFullName()));
+                new SimpleStringProperty(data.getValue().getFirstName() + " " + data.getValue().getLastName()));
 
         genderColumn.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getGender()));
         dobColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(data.getValue().getDateOfBirth()));
+                new SimpleStringProperty(data.getValue().getDOB()));
         phoneColumn.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getPhone()));
 
@@ -53,16 +60,18 @@ public class PatientInfoController {
                 new SimpleStringProperty(data.getValue().getAdmissionDate()));
 
         roomColumn.setCellValueFactory(data ->
-                new SimpleStringProperty(HospitalGuiData.getRoomDisplayText(data.getValue().getRoomId())));
+                new SimpleStringProperty(formatRoom(data.getValue().getRoomID())));
 
-        patientTable.setItems(HospitalGuiData.getPatients());
+        ObservableList<Patient> patients =
+                FXCollections.observableArrayList(patientManager.getAllPatients());
+        patientTable.setItems(patients);
 
         patientTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, selectedPatient) -> {
             if (selectedPatient == null) {
                 selectedPatientLabel.setText("Patient Selected: Null");
             } else {
                 selectedPatientLabel.setText(
-                        "Patient Selected: " + selectedPatient.getFullName()
+                        "Patient Selected: " + selectedPatient.getFirstName() + " " + selectedPatient.getLastName()
                                 + " | Phone: " + selectedPatient.getPhone()
                                 + " | Email: " + selectedPatient.getEmail()
                 );
@@ -75,20 +84,23 @@ public class PatientInfoController {
         String searchText = searchField.getText();
 
         if (searchText == null || searchText.isBlank()){
-            patientTable.setItems(HospitalGuiData.getPatients());
+            ObservableList<Patient> patients =
+                    FXCollections.observableArrayList(patientManager.getAllPatients());
+            patientTable.setItems(patients);
             return;
         }
 
         String lowerSearch = searchText.toLowerCase();
-        ObservableList<GuiPatient> filteredPatients = FXCollections.observableArrayList();
+        ObservableList<Patient> filteredPatients = FXCollections.observableArrayList();
 
-        for (GuiPatient patient : HospitalGuiData.getPatients()){
-            if (patient.getFullName().toLowerCase().contains(lowerSearch)
+        for (Patient patient : patientManager.getAllPatients()){
+            if (patient.getFirstName().toLowerCase().contains(lowerSearch)
+                    || patient.getLastName().toLowerCase().contains(lowerSearch)
                     || patient.getGender().toLowerCase().contains(lowerSearch)
-                    || patient.getDateOfBirth().toLowerCase().contains(lowerSearch)
+                    || patient.getDOB().toLowerCase().contains(lowerSearch)
                     || patient.getPhone().toLowerCase().contains(lowerSearch)
                     || patient.getEmail().toLowerCase().contains(lowerSearch)
-                    || HospitalGuiData.getRoomDisplayText(patient.getRoomId()).toLowerCase().contains(lowerSearch)) {
+                    || formatRoom(patient.getRoomID()).toLowerCase().contains(lowerSearch)) {
                 filteredPatients.add(patient);
             }
         }
@@ -99,7 +111,9 @@ public class PatientInfoController {
     @FXML
     private void clearSearch(){
         searchField.clear();
-        patientTable.setItems(HospitalGuiData.getPatients());
+        ObservableList<Patient> patients =
+                    FXCollections.observableArrayList(patientManager.getAllPatients());
+            patientTable.setItems(patients);
         selectedPatientLabel.setText("Patient Selected: Null");
     }
 
@@ -126,4 +140,17 @@ public class PatientInfoController {
     private void logout() throws IOException{
         App.setRoot("login");
     }
+    //helper for room format
+    private String formatRoom(Integer roomId) {
+    if (roomId == null) {
+        return "Unassigned";
+    }
+
+    try {
+        Room room = roomManager.getRoom(roomId);
+        return "Floor " + room.getFloorNumber() + " - Room " + room.getRoomNumber();
+    } catch (Exception e) {
+        return "Unknown Room";
+    }
+}
 }
