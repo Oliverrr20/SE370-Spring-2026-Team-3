@@ -1,5 +1,11 @@
 package hospital_room_manager;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -16,23 +22,47 @@ public class HospitalGuiData {
             new GuiRoom(8, 302, 3, "Standard", "Available")
     );
 
-    private static final ObservableList<GuiPatient> patients = FXCollections.observableArrayList(
-            new GuiPatient(1, "Maria", "Lopez", "Female", "1992-04-11",
-                    "760-111-2222", "maria@email.com", "2025-02-01", 2),
-            new GuiPatient(2, "James", "Brown", "Male", "1985-09-20",
-                    "760-333-4444", "james@email.com", "2025-02-03", 6),
-            new GuiPatient(3, "Ava", "Smith", "Female", "2001-01-15",
-                    "760-555-6666", "ava@email.com", "2025-02-05", null),
-            new GuiPatient(4, "Daniel", "Garcia", "Male", "1978-12-03",
-                    "760-777-8888", "daniel@email.com", "2025-02-07", null)
-    );
+    private static final String URL  = "jdbc:mysql://localhost:3306/se370team3";
+    private static final String USER = "admin";
+    private static final String PASS = "team3Pass!";
+
+    private static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASS);
+    }
 
     public static ObservableList<GuiRoom> getRooms() {
         return rooms;
     }
 
     public static ObservableList<GuiPatient> getPatients() {
-        return patients;
+        ObservableList<GuiPatient> list = FXCollections.observableArrayList();
+
+        String sql = "SELECT PatientID, FirstName, LastName, Gender, DOB, " +
+                     "Phone, Email, AdmissionDate, RoomID FROM Patient";
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(new GuiPatient(
+                        rs.getInt("PatientID"),
+                        rs.getString("FirstName"),
+                        rs.getString("LastName"),
+                        rs.getString("Gender"),
+                        rs.getString("DOB"),
+                        rs.getString("Phone"),
+                        rs.getString("Email"),
+                        rs.getString("AdmissionDate"),
+                        rs.getObject("RoomID", Integer.class)
+                ));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
     public static ObservableList<GuiRoom> getAvailableRooms() {
