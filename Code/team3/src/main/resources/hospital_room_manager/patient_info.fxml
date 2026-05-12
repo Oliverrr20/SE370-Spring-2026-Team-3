@@ -20,33 +20,39 @@
             <Label text="Hospital Room Manager" styleClass="nav-title"/>
             <Button text="Room Dashboard" onAction="#goToDashboard"/>
             <Button text="Assign Patient" onAction="#goToAssignment"/>
-            <Button text="Patient Info"   onAction="#goToPatientInfo"/>
-            <Button text="Logout"         onAction="#logout"/>
+            <Button text="Patient Info" onAction="#goToPatientInfo"/>
+            <Button text="+ Add patient" onAction="#goToAddPatient"/>
+            <Button text="Logout" onAction="#logout"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="15" styleClass="form-card">
-            <Label text="Patient Information" styleClass="main-title"/>
+        <VBox spacing="18">
+            <Label text="Patient Info Screen" styleClass="main-title"/>
 
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <TextField fx:id="searchField" promptText="Search by name, phone, email, room..." prefWidth="400"/>
-                <Button text="Search" onAction="#searchPatients" styleClass="primary-button"/>
-                <Button text="Clear"  onAction="#clearSearch"/>
+            <HBox spacing="10">
+                <TextField fx:id="searchField"
+                           promptText="Search by name, gender, phone, email, or room"
+                           prefWidth="400"/>
+                <Button text="Search" onAction="#searchPatients"/>
+                <Button text="Clear" onAction="#clearSearch"/>
             </HBox>
 
-            <TableView fx:id="patientTable" VBox.vgrow="ALWAYS">
+            <TableView fx:id="patientTable" prefHeight="360">
                 <columns>
-                    <TableColumn fx:id="nameColumn"      text="Name"           prefWidth="160"/>
-                    <TableColumn fx:id="genderColumn"    text="Gender"         prefWidth="80"/>
-                    <TableColumn fx:id="phoneColumn"     text="Phone"          prefWidth="130"/>
-                    <TableColumn fx:id="emailColumn"     text="Email"          prefWidth="190"/>
-                    <TableColumn fx:id="admissionColumn" text="Admission Date" prefWidth="130"/>
-                    <TableColumn fx:id="roomColumn"      text="Room"           prefWidth="110"/>
+                    <TableColumn fx:id="nameColumn" text="Patient Name" prefWidth="170"/>
+                    <TableColumn fx:id="genderColumn" text="Gender" prefWidth="100"/>
+                    <TableColumn fx:id="dobColumn" text="Date of Birth" prefWidth="140"/>
+                    <TableColumn fx:id="phoneColumn" text="Phone" prefWidth="140"/>
+                    <TableColumn fx:id="emailColumn" text="Email" prefWidth="210"/>
+                    <TableColumn fx:id="admissionColumn" text="Admission Date" prefWidth="140"/>
+                    <TableColumn fx:id="roomColumn" text="Room" prefWidth="110"/>
                 </columns>
             </TableView>
 
-            <Label fx:id="selectedPatientLabel" text="Patient Selected: None" styleClass="info-label"/>
+            <Label fx:id="selectedPatientLabel"
+                   text="Selected Patient: None"
+                   styleClass="info-label"/>
         </VBox>
     </center>
 

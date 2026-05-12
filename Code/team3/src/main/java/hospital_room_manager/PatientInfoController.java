@@ -22,6 +22,8 @@ public class PatientInfoController {
     @FXML
     private TableColumn<GuiPatient, String> genderColumn;
     @FXML
+    private TableColumn<GuiPatient,String> dobColumn;
+    @FXML
     private TableColumn<GuiPatient, String> phoneColumn;
     @FXML
     private TableColumn<GuiPatient, String> emailColumn;
@@ -39,7 +41,8 @@ public class PatientInfoController {
 
         genderColumn.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getGender()));
-
+        dobColumn.setCellValueFactory(data ->
+                new SimpleStringProperty(data.getValue().getDateOfBirth()));
         phoneColumn.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getPhone()));
 
@@ -82,6 +85,7 @@ public class PatientInfoController {
         for (GuiPatient patient : HospitalGuiData.getPatients()){
             if (patient.getFullName().toLowerCase().contains(lowerSearch)
                     || patient.getGender().toLowerCase().contains(lowerSearch)
+                    || patient.getDateOfBirth().toLowerCase().contains(lowerSearch)
                     || patient.getPhone().toLowerCase().contains(lowerSearch)
                     || patient.getEmail().toLowerCase().contains(lowerSearch)
                     || HospitalGuiData.getRoomDisplayText(patient.getRoomId()).toLowerCase().contains(lowerSearch)) {
@@ -112,6 +116,10 @@ public class PatientInfoController {
     @FXML
     private void goToPatientInfo() throws IOException{
         App.setRoot("patient_info");
+    }
+
+    @FXML private void goToAddPatient() throws IOException {
+        App.setRoot("add_patient");
     }
 
     @FXML

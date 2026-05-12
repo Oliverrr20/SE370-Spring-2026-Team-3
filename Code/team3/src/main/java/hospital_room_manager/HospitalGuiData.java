@@ -1,37 +1,33 @@
 package hospital_room_manager;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+import backend.Room;
+import backend.RoomManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class HospitalGuiData {
 
-    private static final ObservableList<GuiRoom> rooms = FXCollections.observableArrayList(
-            new GuiRoom(1, 101, 1, "Standard", "Available"),
-            new GuiRoom(2, 102, 1, "Standard", "Occupied"),
-            new GuiRoom(3, 103, 1, "ICU", "Available"),
-            new GuiRoom(4, 201, 2, "Standard", "Closed"),
-            new GuiRoom(5, 202, 2, "Private", "Available"),
-            new GuiRoom(6, 203, 2, "Private", "Occupied"),
-            new GuiRoom(7, 301, 3, "ICU", "Available"),
-            new GuiRoom(8, 302, 3, "Standard", "Available")
+    private static final RoomManager roomManager = new RoomManager();
+
+    private static final ObservableList<GuiPatient> patients = FXCollections.observableArrayList(
+            new GuiPatient(1, "Julia", "Hernandez", "Female", "1989-09-06",
+                    "760-111-2222", "maria@email.com", "2025-04-03", 2),
+            new GuiPatient(2, "Will", "Smith", "Male", "2002-04-20",
+                    "760-333-4444", "smith@email.com", "2025-02-03", 6),
+            new GuiPatient(3, "Bruce", "Wayne", "Male", "1999-02-15",
+                    "760-555-6666", "batman@email.com", "2025-02-05", null),
+            new GuiPatient(4, "Hannah", "Jones", "Female", "1981-12-08",
+                    "760-777-8888", "jones@email.com", "2025-02-07", null)
     );
 
-    private static final String URL  = "jdbc:mysql://localhost:3306/se370team3";
-    private static final String USER = "admin";
-    private static final String PASS = "team3Pass!";
-
-    private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASS);
-    }
-
     public static ObservableList<GuiRoom> getRooms() {
-        return rooms;
+        ObservableList<GuiRoom> guiRooms = FXCollections.observableArrayList();
+
+        for (Room room : roomManager.getAllRooms()) {
+            guiRooms.add(convertRoomToGuiRoom(room));
+        }
+
+        return guiRooms;
     }
 
     public static ObservableList<GuiPatient> getPatients() {
@@ -68,8 +64,8 @@ public class HospitalGuiData {
     public static ObservableList<GuiRoom> getAvailableRooms() {
         ObservableList<GuiRoom> availableRooms = FXCollections.observableArrayList();
 
-        for (GuiRoom room : rooms) {
-            if (room.getRoomStatus().equalsIgnoreCase("Available")) {
+        for (GuiRoom room : getRooms()) {
+            if (room.getRoomStatus() != null && room.getRoomStatus().equalsIgnoreCase("Available")) {
                 availableRooms.add(room);
             }
         }
@@ -82,7 +78,7 @@ public class HospitalGuiData {
             return null;
         }
 
-        for (GuiRoom room : rooms) {
+        for (GuiRoom room : getRooms()) {
             if (room.getRoomId() == roomId) {
                 return room;
             }
@@ -109,10 +105,20 @@ public class HospitalGuiData {
         GuiRoom oldRoom = findRoomById(patient.getRoomId());
 
         if (oldRoom != null) {
-            oldRoom.setRoomStatus("Available");
+            roomManager.updateRoomStatus(oldRoom.getRoomId(), "Available");
         }
 
         patient.setRoomId(room.getRoomId());
-        room.setRoomStatus("Occupied");
+        roomManager.updateRoomStatus(room.getRoomId(), "Occupied");
+    }
+
+    private static GuiRoom convertRoomToGuiRoom(Room room) {
+        return new GuiRoom(
+                room.getRoomID(),
+                room.getRoomNumber(),
+                room.getFloorNumber(),
+                room.getRoomType(),
+                room.getRoomStatus()
+        );
     }
 }

@@ -15,7 +15,14 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("login"), 640, 480);
+        Parent root = loadFXML("login");
+        scene = new Scene(root, 640, 480);
+
+        if (root instanceof Region) {
+            Region region = (Region) root;
+            region.prefWidthProperty().bind(scene.widthProperty());
+            region.prefHeightProperty().bind(scene.heightProperty());
+        }
 
         String css = App.class.getResource("styles.css").toExternalForm();
         scene.getStylesheets().add(css);
@@ -34,15 +41,7 @@ public class App extends Application {
 
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        Parent root = fxmlLoader.load();
-
-        if (root instanceof Region) {
-            Region region = (Region) root;
-            region.prefWidthProperty().bind(scene.widthProperty());
-            region.prefHeightProperty().bind(scene.heightProperty());
-        }
-
-        return root;
+        return fxmlLoader.load();
     }
 
     public static void main(String[] args) {
