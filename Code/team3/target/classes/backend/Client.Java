@@ -1,9 +1,11 @@
 package backend;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+
 
 @Entity
 public class Client {
@@ -21,8 +23,10 @@ public class Client {
     String LastLogin;   //Set by functions
     String LastUpdated; //Set by functions
 
+
     //empty constructor
     public Client(){}
+
 
     //constructor with basic required fields
     public Client(String fn, String ln, String ur, String dob, String p, String pass) {
@@ -33,6 +37,7 @@ public class Client {
         Phone = p;     //set phone
         Pass = pass;    //set password HASH LATER
     }
+
 
     //constructors with optional field
     public Client(String fn, String ln, String ur, String dob, String p, String e, String pass) {
@@ -45,11 +50,14 @@ public class Client {
         Pass = pass;    //set password
     }
 
+
     public int getUserID() {
         return UserID;
     }
+
 
     public void setUserID(int cID) {
         UserID = cID;
     }
 }
+
