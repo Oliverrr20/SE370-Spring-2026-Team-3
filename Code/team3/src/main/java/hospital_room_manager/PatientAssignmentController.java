@@ -22,9 +22,17 @@ public class PatientAssignmentController {
 
     @FXML
     private void initialize() {
-        patientComboBox.setItems(HospitalGuiData.getPatients());
-        roomComboBox.setItems(HospitalGuiData.getAvailableRooms());
+        preparePatientNames();
+        prepareRoomNames();
+        refreshAssignmentChoices();
 
+        patientComboBox.setOnAction(event -> updatePreview());
+        roomComboBox.setOnAction(event -> updatePreview());
+
+        updatePreview();
+    }
+
+    private void preparePatientNames() {
         patientComboBox.setConverter(new StringConverter<GuiPatient>(){
             @Override
             public String toString(GuiPatient patient){
@@ -40,7 +48,9 @@ public class PatientAssignmentController {
                 return null;
             }
         });
+    }
 
+    private void prepareRoomNames() {
         roomComboBox.setConverter(new StringConverter<GuiRoom>() {
             @Override
             public String toString(GuiRoom room) {
@@ -48,7 +58,9 @@ public class PatientAssignmentController {
                     return "";
                 }
 
-                return "Room "+ room.getRoomNumber() + " - " + room.getRoomType();
+                return "Room " + room.getRoomNumber()
+                        + " - Floor " + room.getFloorNumber()
+                        + " - " + room.getRoomType();
             }
 
             @Override
@@ -56,11 +68,18 @@ public class PatientAssignmentController {
                 return null;
             }
         });
+    }
 
-        patientComboBox.setOnAction(event -> updatePreview());
-        roomComboBox.setOnAction(event -> updatePreview());
-
-        updatePreview();
+    private void refreshAssignmentChoices() {
+        try {
+            patientComboBox.setItems(HospitalGuiData.getPatients());
+            roomComboBox.setItems(HospitalGuiData.getAvailableRooms());
+        } catch (RuntimeException e) {
+            patientComboBox.getItems().clear();
+            roomComboBox.getItems().clear();
+            messageLabel.setText("Couldn't load patient or room data. Please check your database connection.");
+            e.printStackTrace();
+        }
     }
 
     private void updatePreview() {
@@ -68,13 +87,13 @@ public class PatientAssignmentController {
         GuiRoom room = roomComboBox.getValue();
 
         if (patient == null) {
-            selectedPatientLabel.setText("Patient Selected: Null");
+            selectedPatientLabel.setText("Patient Selected: None");
         } else {
             selectedPatientLabel.setText("Patient Selected: " + patient.getFullName());
         }
 
         if (room == null) {
-            selectedRoomLabel.setText("Room Selected: Null");
+            selectedRoomLabel.setText("Room Selected: None");
         } else {
             selectedRoomLabel.setText("Room Selected: Room " + room.getRoomNumber());
         }
@@ -90,20 +109,23 @@ public class PatientAssignmentController {
             return;
         }
 
-        HospitalGuiData.assignPatientToRoom(selectedPatient, selectedRoom);
+        try {
+            HospitalGuiData.placePatientInRoom(selectedPatient, selectedRoom);
 
-        messageLabel.setText(selectedPatient.getFullName()
-                + " has been assigned to Room "
-                + selectedRoom.getRoomNumber()
-                + ".");
+            messageLabel.setText(selectedPatient.getFullName()
+                    + " has been assigned to Room "
+                    + selectedRoom.getRoomNumber()
+                    + ".");
 
-        roomComboBox.setItems(HospitalGuiData.getAvailableRooms());
-        roomComboBox.setValue(null);
+            roomComboBox.setValue(null);
+            patientComboBox.setValue(null);
+            refreshAssignmentChoices();
+            updatePreview();
 
-        patientComboBox.setItems(null);
-        patientComboBox.setItems(HospitalGuiData.getPatients());
-
-        updatePreview();
+        } catch (RuntimeException e) {
+            messageLabel.setText("Assignment was not saved: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -127,6 +149,7 @@ public class PatientAssignmentController {
 
     @FXML
     private void logout() throws IOException {
+        LoginSession.logout();
         App.setRoot("login");
     }
 }

@@ -1,5 +1,8 @@
 package hospital_room_manager;
 
+import backend.Client;
+import backend.Patient;
+import backend.PatientManager;
 import backend.Room;
 import backend.RoomManager;
 import javafx.collections.FXCollections;
@@ -7,18 +10,8 @@ import javafx.collections.ObservableList;
 
 public class HospitalGuiData {
 
+    private static final PatientManager patientManager = new PatientManager();
     private static final RoomManager roomManager = new RoomManager();
-
-    private static final ObservableList<GuiPatient> patients = FXCollections.observableArrayList(
-            new GuiPatient(1, "Julia", "Hernandez", "Female", "1989-09-06",
-                    "760-111-2222", "maria@email.com", "2025-04-03", 2),
-            new GuiPatient(2, "Will", "Smith", "Male", "2002-04-20",
-                    "760-333-4444", "smith@email.com", "2025-02-03", 6),
-            new GuiPatient(3, "Bruce", "Wayne", "Male", "1999-02-15",
-                    "760-555-6666", "batman@email.com", "2025-02-05", null),
-            new GuiPatient(4, "Hannah", "Jones", "Female", "1981-12-08",
-                    "760-777-8888", "jones@email.com", "2025-02-07", null)
-    );
 
     public static ObservableList<GuiRoom> getRooms() {
         ObservableList<GuiRoom> guiRooms = FXCollections.observableArrayList();
@@ -31,7 +24,13 @@ public class HospitalGuiData {
     }
 
     public static ObservableList<GuiPatient> getPatients() {
-        return patients;
+        ObservableList<GuiPatient> guiPatients = FXCollections.observableArrayList();
+
+        for (Patient patient : patientManager.getAllPatients()) {
+            guiPatients.add(convertPatientToGuiPatient(patient));
+        }
+
+        return guiPatients;
     }
 
     public static ObservableList<GuiRoom> getAvailableRooms() {
@@ -70,19 +69,39 @@ public class HospitalGuiData {
         return "Room " + room.getRoomNumber();
     }
 
-    public static void assignPatientToRoom(GuiPatient patient, GuiRoom room) {
+    public static void placePatientInRoom(GuiPatient patient, GuiRoom room) {
         if (patient == null || room == null) {
-            return;
+            throw new RuntimeException("Select a patient and an available room");
         }
 
-        GuiRoom oldRoom = findRoomById(patient.getRoomId());
+        int assignedByUserId = 0;
+        Client currentClient = LoginSession.getCurrentClient();
 
-        if (oldRoom != null) {
-            roomManager.updateRoomStatus(oldRoom.getRoomId(), "Available");
+        if (currentClient != null) {
+            assignedByUserId = currentClient.getClientID();
         }
 
+        patientManager.placePatientInRoom(patient.getPatientId(), room.getRoomId(), assignedByUserId);
         patient.setRoomId(room.getRoomId());
-        roomManager.updateRoomStatus(room.getRoomId(), "Occupied");
+        room.setRoomStatus("Occupied");
+    }
+
+    public static void assignPatientToRoom(GuiPatient patient, GuiRoom room) {
+        placePatientInRoom(patient, room);
+    }
+
+    private static GuiPatient convertPatientToGuiPatient(Patient patient) {
+        return new GuiPatient(
+                patient.getPatientID(),
+                patient.getFirstName(),
+                patient.getLastName(),
+                patient.getGender(),
+                patient.getDOB(),
+                patient.getPhone(),
+                patient.getEmail(),
+                patient.getAdmissionDate(),
+                patient.getRoomID()
+        );
     }
 
     private static GuiRoom convertRoomToGuiRoom(Room room) {

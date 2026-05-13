@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import backend.Room;
 import backend.RoomManager;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -45,7 +46,7 @@ public class RoomDashboardController {
 
     private void loadDashboard() {
         try {
-            ObservableList<GuiRoom> rooms = HospitalGuiData.getRooms();
+            ObservableList<GuiRoom> rooms = gatherRoomsForDashboard();
 
             int available = 0;
             int occupied = 0;
@@ -93,6 +94,22 @@ public class RoomDashboardController {
         }
     }
 
+    private ObservableList<GuiRoom> gatherRoomsForDashboard() {
+        ObservableList<GuiRoom> rooms = FXCollections.observableArrayList();
+
+        for (Room room : roomManager.getAllRooms()) {
+            rooms.add(new GuiRoom(
+                    room.getRoomID(),
+                    room.getRoomNumber(),
+                    room.getFloorNumber(),
+                    room.getRoomType(),
+                    room.getRoomStatus()
+            ));
+        }
+
+        return rooms;
+    }
+
     private VBox createRoomCard(GuiRoom room) {
         Label roomNumber = new Label("Room " + room.getRoomNumber());
         roomNumber.getStyleClass().add("room-title");
@@ -114,6 +131,7 @@ public class RoomDashboardController {
 
         return card;
     }
+
     @FXML private void openPopup() {
         if (overlay != null) {
             overlay.setVisible(true);
@@ -125,6 +143,7 @@ public class RoomDashboardController {
             popupPane.setManaged(true);
         }
     }
+
     @FXML private void closePopup() {
         if (overlay != null) {
             overlay.setVisible(false);
@@ -148,16 +167,16 @@ public class RoomDashboardController {
             typeField.clear();
         }
     }
+
     @FXML private void onSaveRoomClicked() throws IOException {
         if (roomNumberField == null ||
             floorField == null ||
             typeField.getText().isBlank()) {
             return;
         }
-       
+
         int roomNumber = roomNumberField.getValue();
         int floorNumber = floorField.getValue();
-
 
         Room newRoom = new Room(
             roomNumber,
@@ -186,6 +205,7 @@ public class RoomDashboardController {
     @FXML private void goToAddPatient() throws IOException {
         App.setRoot("add_patient");
     }
+
     @FXML private void logout() throws IOException {
         LoginSession.logout();
         App.setRoot("login");
