@@ -144,23 +144,74 @@ public class RoomManager {
         }
     }
 
-    public void removeRoom(int id) {
-        Room room = getRoom(id);
+    public void deleteRoomAfterSafetyCheck(int roomId) {
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            connection.setAutoCommit(false);
 
-        if (room.getRoomStatus().equalsIgnoreCase("Occupied")) {
-            throw new RuntimeException("Cannot delete occupied room");
-        }
+            try {
+                String roomStatus = findRoomStatusBeforeDelete(connection, roomId);
 
-        String sql = "DELETE FROM Room WHERE RoomID = ?";
+                if (roomStatus.equalsIgnoreCase("Occupied")) {
+                    throw new RuntimeException("This room is occupied and cannot be deleted.");
+                }
 
-        try (Connection connection = DatabaseConnection.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+                if (someoneIsStillAssignedToRoom(connection, roomId)) {
+                    throw new RuntimeException("This room still has a patient assigned to it.");
+                }
 
-            statement.setInt(1, id);
-            statement.executeUpdate();
+                removeTheRoomRecord(connection, roomId);
+                connection.commit();
+
+            } catch (RuntimeException | SQLException e) {
+                connection.rollback();
+                throw e;
+            } finally {
+                connection.setAutoCommit(true);
+            }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Unable to remove room: " + e.getMessage(), e);
+            throw new RuntimeException("Unable to delete room: " + e.getMessage(), e);
+        }
+    }
+
+    public void removeRoom(int id) {
+        deleteRoomAfterSafetyCheck(id);
+    }
+
+    private String findRoomStatusBeforeDelete(Connection connection, int roomId) throws SQLException {
+        String sql = "SELECT RoomStatus FROM Room WHERE RoomID = ? FOR UPDATE";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, roomId);
+
+            try (ResultSet result = statement.executeQuery()) {
+                if (!result.next()) {
+                    throw new RuntimeException("Room not found.");
+                }
+
+                return result.getString("RoomStatus");
+            }
+        }
+    }
+
+    private boolean someoneIsStillAssignedToRoom(Connection connection, int roomId) throws SQLException {
+        String sql = "SELECT PatientID FROM Patient WHERE RoomID = ? LIMIT 1";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, roomId);
+
+            try (ResultSet result = statement.executeQuery()) {
+                return result.next();
+            }
+        }
+    }
+
+    private void removeTheRoomRecord(Connection connection, int roomId) throws SQLException {
+        String sql = "DELETE FROM Room WHERE RoomID = ?";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, roomId);
+            statement.executeUpdate();
         }
     }
 

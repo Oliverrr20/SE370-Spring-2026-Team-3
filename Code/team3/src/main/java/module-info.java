@@ -1,6 +1,7 @@
 module hospital_room_manager {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
     requires jakarta.persistence;
     requires jbcrypt;
     requires java.sql;
