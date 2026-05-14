@@ -14,7 +14,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
-
+//Controller that is used for the "new account" page.
+//Validates the filled form before creating a new staff account
 public class NewAccountController {
     @FXML private TextField firstField;
     @FXML private TextField lastField;
@@ -26,6 +27,7 @@ public class NewAccountController {
     @FXML private Label messageLabel;
     private ClientManager clientManager = new ClientManager();
 
+    //Sets up the role (as a dropdown) and clears error styles.
     @FXML public void initialize() {
         roleBox.getItems().addAll("Admin", "Nurse", "Doctor", "Staff");
 
@@ -40,6 +42,7 @@ public class NewAccountController {
         dobPicker.valueProperty().addListener((o, oldV, newV) -> clearInvalid(dobPicker));
     }
 
+    //Validates the account form
     @FXML private void accountCreated() throws IOException {
         boolean hasError = false;
         boolean invalidPass = false;
@@ -118,12 +121,14 @@ public class NewAccountController {
         clientManager.addClient(newClient);
         App.setRoot("login");
     }
-    //for invalid field logic
+    //Adds the red error style to a field.
     private void markInvalid(Control field) {
         if (!field.getStyleClass().contains("input-error")) {
             field.getStyleClass().add("input-error");
         }
     }
+
+    //Removes the red error from the field
     private void clearInvalid(Control field) {
         field.getStyleClass().remove("input-error");
     }

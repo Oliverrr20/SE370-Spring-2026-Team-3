@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+//The object of Patient data, it matches with the one in Patient table (MySQL).
 @Entity
 public class Patient{
 
@@ -23,6 +24,7 @@ public class Patient{
     private String LastUpdated;
     private Integer RoomID;
 
+    //Its an empty constructor used to create a patient and filling the fields later on.
     public Patient(){
     }
 
@@ -34,6 +36,7 @@ public class Patient{
         RoomID = null;
     }
 
+    //This constructor is used by the "add patient" form.
     public Patient(String fn, String ln, String g, String dob, String p, String e){
         FirstName = fn;
         LastName = ln;

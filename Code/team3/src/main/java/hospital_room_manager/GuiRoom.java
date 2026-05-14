@@ -1,5 +1,6 @@
 package hospital_room_manager;
 
+//A room view object used by the Gui for room labes, cards, etc. 
 public class GuiRoom {
 
     private int roomId;
@@ -8,6 +9,7 @@ public class GuiRoom {
     private String roomType;
     private String roomStatus;
 
+    //Stores a "snapshot" of the room
     public GuiRoom(int roomId, int roomNumber, int floorNumber, String roomType, String roomStatus) {
         this.roomId = roomId;
         this.roomNumber = roomNumber;
@@ -40,6 +42,7 @@ public class GuiRoom {
         this.roomStatus = roomStatus;
     }
 
+    //A text that is shown in dropdowns if JavaFX needs room label.
     @Override
     public String toString() {
         return "Room " + roomNumber + " - " + roomType + " - " + roomStatus;

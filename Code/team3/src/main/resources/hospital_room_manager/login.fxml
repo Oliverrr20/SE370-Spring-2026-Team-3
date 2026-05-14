@@ -8,12 +8,14 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
+<!-- First screen of the app where staff mem log in-->
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="hospital_room_manager.LoginController"
             styleClass="page-background">
 
     <center>
+    <!-- Login cards keeping the form centered as much as possible-->
         <VBox alignment="CENTER" spacing="18" styleClass="login-card">
             <Label text="Hospital Room Manager" styleClass="main-title"/>
             <Label text="Staff Login" styleClass="section-title"/>
@@ -24,7 +26,7 @@
             <Button text="Login" onAction="#handleLogin" styleClass="primary-button" maxWidth="300"/>
 
             <Button text="Create an account" onAction="#handleNewAccount" styleClass="primary-button" maxWidth="300"/>
-            
+            <!--login errors, showed here-->
             <Label fx:id="messageLabel" styleClass="error-label"/>
         </VBox>
     </center>

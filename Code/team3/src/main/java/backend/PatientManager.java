@@ -7,8 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+//Main purpose is to handle the patient database actions,
+//including assignning and adding patienrs to rooms.
 public class PatientManager {
 
+    //Used to add a patient (without a room). There is a room screen
+    //that handles the room later. 
     public void addPatient(Patient patient) {
         if (patient == null) {
             throw new RuntimeException("Patient cannot be null");
@@ -35,6 +39,7 @@ public class PatientManager {
         }
     }
 
+    //It is used to find a patient using an Id when the screen need a full patient record
     public Patient getPatient(int id) {
         String sql = "SELECT * FROM Patient WHERE PatientID = ?";
 
@@ -55,8 +60,8 @@ public class PatientManager {
             throw new RuntimeException("Unable to get patient: " + e.getMessage(), e);
         }
     }
-
-    public List<Patient> getAllPatients() {
+    //Loads the patients for the gui 
+    public List<Patient> getAllPatients(){
         List<Patient> patients = new ArrayList<>();
 
         String sql = "SELECT * FROM Patient ORDER BY LastName, FirstName";
@@ -76,6 +81,7 @@ public class PatientManager {
         return patients;
     }
 
+    //The objective is to assign a patient to a room (keeping the patient, the room info, etc) in sync.
     public void placePatientInRoom(int patientId, int roomId, int assignedByUserId) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             connection.setAutoCommit(false);
@@ -127,6 +133,7 @@ public class PatientManager {
         }
     }
 
+    //Checks for the patient first and if the patient moved the room opens back up again. 
     private Integer findCurrentRoomForPatient(Connection connection, int patientId) throws SQLException {
         String sql = "SELECT RoomID FROM Patient WHERE PatientID = ? FOR UPDATE";
 
@@ -144,6 +151,7 @@ public class PatientManager {
         }
     }
 
+    //It function is before to assign anyone into a room, read the room status first. 
     private String findRoomStatusForAssignment(Connection connection, int roomId) throws SQLException {
         String sql = "SELECT RoomStatus FROM Room WHERE RoomID = ? FOR UPDATE";
 
@@ -160,6 +168,7 @@ public class PatientManager {
         }
     }
 
+    //This is a very important, it avoids writing the same room assigment two times. 
     private boolean roomAlreadyHasPatient(Connection connection, int patientId, int roomId) throws SQLException {
         String sql = "SELECT PatientID FROM Patient WHERE RoomID = ? AND PatientID <> ? LIMIT 1";
 
@@ -173,6 +182,7 @@ public class PatientManager {
         }
     }
 
+    //Will close any old assignments rows and then it will write the new assignment
     private void endOpenAssignmentRecords(Connection connection, int patientId) throws SQLException {
         String sql = "UPDATE PatientUserJunction "
                 + "SET AssignmentEnd = NOW() "
@@ -184,6 +194,7 @@ public class PatientManager {
         }
     }
 
+    //Updates the patient row (using the room id he/she is in)
     private void setPatientRoom(Connection connection, int patientId, int roomId) throws SQLException {
         String sql = "UPDATE Patient SET RoomID = ?, LastUpdated = NOW() WHERE PatientID = ?";
 
@@ -194,6 +205,8 @@ public class PatientManager {
         }
     }
 
+    //I decided to named it "paint" because what it does is it updates the room status
+    //that is shown on the dashboard (just like painting it to the dashboard)
     private void paintRoomStatus(Connection connection, int roomId, String status) throws SQLException {
         String sql = "UPDATE Room SET RoomStatus = ?, LastUpdated = NOW() WHERE RoomID = ?";
 
@@ -203,7 +216,7 @@ public class PatientManager {
             statement.executeUpdate();
         }
     }
-
+    //It adds the patient link for any admin/staff that made the assignment.
     private void writeRoomAssignmentHistory(Connection connection, int patientId, int assignedByUserId) throws SQLException {
         String sql = "INSERT INTO PatientUserJunction "
                 + "(PatientID, UserID, AssignmentTime) "
@@ -215,7 +228,7 @@ public class PatientManager {
             statement.executeUpdate();
         }
     }
-
+    //The purpose is to remove a patient record (using the Id) when need it
     public void removePatient(int id) {
         Patient patient = getPatient(id);
 
@@ -236,6 +249,7 @@ public class PatientManager {
         }
     }
 
+    //Its a phone lookup that is used by older patient related checks. 
     public boolean authenticate(String phone) {
         String sql = "SELECT * FROM Patient WHERE Phone = ?";
 
@@ -252,7 +266,7 @@ public class PatientManager {
             throw new RuntimeException("Unable to check phone number: " + e.getMessage(), e);
         }
     }
-
+    //Sets one database row into a patient object. 
     private Patient mapPatient(ResultSet result) throws SQLException {
         Patient patient = new Patient();
 

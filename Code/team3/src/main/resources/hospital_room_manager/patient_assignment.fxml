@@ -8,12 +8,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<!--The screen that is used to assign a patient to a room that is available-->
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="hospital_room_manager.PatientAssignmentController"
             styleClass="page-background">
 
     <top>
+    <!--Naviagtion bar-->
         <HBox alignment="CENTER_LEFT" spacing="15" styleClass="top-nav">
             <Label text="Hospital Room Manager" styleClass="nav-title"/>
             <Button text="Room Dashboard" onAction="#goToDashboard"/>
@@ -25,6 +27,7 @@
     </top>
 
     <center>
+    <!--Assignment form, shows dropdowns.-->
         <VBox spacing="18" styleClass="form-card">
             <Label text="Patient Assignment Screen" styleClass="main-title"/>
             <Label text="Assign a patient to one of the currently available rooms." styleClass="info-label"/>

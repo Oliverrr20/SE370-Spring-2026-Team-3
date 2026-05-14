@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+//This class represents what an account will include in our system.
 @Entity
 public class Client {
 
@@ -23,10 +23,10 @@ public class Client {
     private String Pass;
     private String LastLogin;
     private String LastUpdated;
-
+    //THis is an empty constructor, its there when Java needs to create the object first.
     public Client() {
     }
-
+    //This constructor is only used when an account is getting created from the Gui. 
     public Client(String fn, String ln, String ur, String dob, String p, String pass) {
         FirstName = fn;
         LastName = ln;
@@ -35,7 +35,7 @@ public class Client {
         Phone = p;
         Pass = BCrypt.hashpw(pass, BCrypt.gensalt());
     }
-
+    //This constructor is only used when an account is getting created from the Gui. 
     public Client(String fn, String ln, String ur, String dob, String p, String e, String pass) {
         FirstName = fn;
         LastName = ln;

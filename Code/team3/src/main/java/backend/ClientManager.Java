@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 import org.mindrot.jbcrypt.BCrypt;
 
+//This class job is to handle the database work for the staff accounts. 
 public class ClientManager {
 
     public boolean checkPhone(String phone) {
@@ -25,7 +26,7 @@ public class ClientManager {
             throw new RuntimeException("Unable to check phone number: " + e.getMessage(), e);
         }
     }
-
+    //Help us adding new staff accounts to the Client table. 
     public void addClient(Client client) {
         if (client == null) {
             throw new RuntimeException("Client cannot be null");
@@ -52,7 +53,7 @@ public class ClientManager {
             throw new RuntimeException("Unable to add client: " + e.getMessage(), e);
         }
     }
-
+    //This Client compares the login info with the one stored in the database.
     public Client authenticate(String phone, String pass) {
         String sql = "SELECT * FROM Client WHERE Phone = ?";
 
@@ -109,7 +110,7 @@ public class ClientManager {
             throw new RuntimeException("Unable to update last login: " + e.getMessage(), e);
         }
     }
-
+    //The purpose of this client is to convert a database row into a Client object. 
     private Client mapClient(ResultSet result) throws SQLException {
         Client client = new Client();
 

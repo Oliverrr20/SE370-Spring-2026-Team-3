@@ -9,6 +9,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+//It is a controller for the login page. It purpose is to check the credentials while 
+//storing the user that is logging in. 
 public class LoginController {
 
     @FXML
@@ -23,10 +25,13 @@ public class LoginController {
     private final ClientManager clientManager = new ClientManager();
 
     @FXML
+    //Used to check if the login is valid, if it is, moves the user to the dashboard.
     private void handleLogin() throws IOException {
         String phone = phoneField.getText();
         String password = passwordField.getText();
 
+        //We used phone number to log in since we didnt create user-names,
+        //so we thought using the phone number was a good solution. 
         if (phone == null || phone.isBlank() || password == null || password.isBlank()) {
             messageLabel.setText("Enter phone number and password.");
             return;
@@ -50,6 +55,7 @@ public class LoginController {
     }
 
     @FXML
+    //It opens the account creation screen. 
     private void handleNewAccount() throws IOException {
         App.setRoot("new_account");
     }

@@ -15,6 +15,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
+//Controller for the patient info screen and patient search.
 public class PatientInfoController {
 
     @FXML
@@ -42,6 +43,7 @@ public class PatientInfoController {
     private final PatientManager patientManager = new PatientManager();
 
     @FXML
+    //Sets up the patient table and loads the current patient list.
     private void initialize() {
         nameColumn.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getFirstName() + " " + data.getValue().getLastName()));
@@ -80,6 +82,7 @@ public class PatientInfoController {
     }
 
     @FXML
+    //It function is to filter the table by using the search box
     private void searchPatients() {
         String searchText = searchField.getText();
 
@@ -109,6 +112,7 @@ public class PatientInfoController {
     }
 
     @FXML
+    //Clears the search box, showing all patients again
     private void clearSearch(){
         searchField.clear();
         ObservableList<Patient> patients =

@@ -9,11 +9,13 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
+//Used to start the JavaFX app, switching between FXML screens. 
 public class App extends Application {
 
     private static Scene scene;
 
     @Override
+    //It loads the first screen, then applies the stylesheet
     public void start(Stage stage) throws IOException {
         Parent root = loadFXML("login");
         scene = new Scene(root, 640, 480);
@@ -34,16 +36,19 @@ public class App extends Application {
         stage.show();
     }
 
+    //swaps the page with no need of restarting the app.
     public static void setRoot(String fxml) throws IOException {
         Parent root = loadFXML(fxml);
         scene.setRoot(root);
     }
 
+    //Loads FXML file from the resources folder
     private static Parent loadFXML(String fxml) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 
+    //The ordinary Java entry point. 
     public static void main(String[] args) {
         launch();
     }

@@ -1,5 +1,8 @@
+
 package hospital_room_manager;
 
+//This is the patient view object that uses the Gui, so screens dont have
+//to display raw database objects directly.
 public class GuiPatient {
 
     private int patientId;
@@ -12,9 +15,7 @@ public class GuiPatient {
     private String admissionDate;
     private Integer roomId;
 
-    public GuiPatient(int patientId, String firstName, String lastName, String gender,
-                      String dateOfBirth, String phone, String email,
-                      String admissionDate, Integer roomId) {
+    public GuiPatient(int patientId, String firstName, String lastName, String gender, String dateOfBirth, String phone, String email, String admissionDate, Integer roomId) {
         this.patientId = patientId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -26,6 +27,7 @@ public class GuiPatient {
         this.roomId = roomId;
     }
 
+    //Getters that are used by Table-View columns and ComboBox.
     public int getPatientId() {
         return patientId;
     }

@@ -14,6 +14,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.util.StringConverter;
 
+//Controller for assigning patients to available rooms
 public class PatientAssignmentController {
 
     @FXML private ComboBox<Patient> patientComboBox;
@@ -26,6 +27,8 @@ public class PatientAssignmentController {
     private final RoomManager roomManager = new RoomManager();
 
     @FXML
+
+    //Set up dropdown labels, also refreshes the assignment choices.
     private void initialize() {
         setupPatientConverter();
         setupRoomConverter();
@@ -38,8 +41,14 @@ public class PatientAssignmentController {
         updatePreview();
     }
 
+<<<<<<< HEAD
     private void setupPatientConverter() {
         patientComboBox.setConverter(new StringConverter<Patient>() {
+=======
+    //Shows the patient names in the dropdown.
+    private void preparePatientNames() {
+        patientComboBox.setConverter(new StringConverter<GuiPatient>(){
+>>>>>>> 411fcdd (Added final details)
             @Override
             public String toString(Patient p) {
                 if (p == null) return "";
@@ -52,8 +61,14 @@ public class PatientAssignmentController {
         });
     }
 
+<<<<<<< HEAD
     private void setupRoomConverter() {
         roomComboBox.setConverter(new StringConverter<Room>() {
+=======
+    //Shows the room details in the room dropdown
+    private void prepareRoomNames() {
+        roomComboBox.setConverter(new StringConverter<GuiRoom>() {
+>>>>>>> 411fcdd (Added final details)
             @Override
             public String toString(Room r) {
                 if (r == null) return "";
@@ -67,6 +82,7 @@ public class PatientAssignmentController {
         });
     }
 
+    //Reloads patients and available rooms from database
     private void refreshAssignmentChoices() {
         ObservableList<Patient> unassignedPatients = FXCollections.observableArrayList();
         for (Patient p : patientManager.getAllPatients()) {
@@ -82,6 +98,7 @@ public class PatientAssignmentController {
         roomComboBox.setItems(availableRooms);
     }
 
+    //Updates the message depending on the patient or room status
     private void updatePreview() {
         Patient p = patientComboBox.getValue();
         Room r = roomComboBox.getValue();
@@ -98,6 +115,7 @@ public class PatientAssignmentController {
     }
 
     @FXML
+    //Saves the assignment (After both dropdowns have a selection)
     private void assignPatient() {
         Patient p = patientComboBox.getValue();
         Room r = roomComboBox.getValue();

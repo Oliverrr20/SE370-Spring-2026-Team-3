@@ -18,6 +18,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.StringConverter;
 
+//Controller for the room dashboard, including adding rooms and deleting rooms. 
 public class RoomDashboardController {
 
     @FXML private Label totalRoomsLabel;
@@ -41,6 +42,7 @@ public class RoomDashboardController {
     private final RoomManager roomManager = new RoomManager();
 
     @FXML
+    //Loads the dashboard when screen opens
     private void initialize() {
         roomNumberField.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1)
@@ -60,6 +62,7 @@ public class RoomDashboardController {
         loadDashboard();
     }
 
+    //Refreshes the room cards
     private void loadDashboard() {
         try {
             ObservableList<Room> rooms =
@@ -149,7 +152,7 @@ public class RoomDashboardController {
             }
         });
     }
-
+    //Used to reaload the list of available rooms that can be deleted.
     private void refillRoomDeleteChoices() {
         roomChosenForDeleteBox.setItems(
                 FXCollections.observableArrayList(roomManager.getAllRooms())
@@ -171,6 +174,7 @@ public class RoomDashboardController {
     }
 
     @FXML
+    //Closes the add room "popup" and clears the form
     private void closePopup() {
         overlay.setVisible(false);
         overlay.setManaged(false);
@@ -205,6 +209,7 @@ public class RoomDashboardController {
     }
 
     @FXML
+    //Closes the delete room popup and clears its message
     private void closeRoomDeletePopup() {
         overlay.setVisible(false);
         overlay.setManaged(false);

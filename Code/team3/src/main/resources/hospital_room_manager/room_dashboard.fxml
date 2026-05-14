@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
+<!--It is the room dashboard screen. SHows: total rooms, toom cards, deleted/add popups, etc.-->
 <StackPane xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="hospital_room_manager.RoomDashboardController"
@@ -36,6 +37,7 @@
             <VBox spacing="20">
                 <Label text="Room Dashboard" styleClass="main-title"/>
 
+                <!--Summary nums shown at the top of the dashboard.-->
                 <HBox spacing="15">
                     <VBox styleClass="summary-card">
                         <Label text="Rooms in total" styleClass="summary-text"/>
@@ -59,7 +61,7 @@
                 </HBox>
 
                 <Label text="Rooms" styleClass="section-title"/>
-
+    <!--These are the rooom actions, delete button opens the delete-room popup.-->
                 <HBox spacing="10">
                     <Button text="+ Add Room" onAction="#openPopup"/>
                     <Button text="Delete Room" onAction="#openRoomDeletePopup" styleClass="danger-button"/>
@@ -82,6 +84,7 @@
            managed="false"
            style="-fx-fill: rgba(0,0,0,0.5);" />
 
+<!--Popup used for adding new rooms-->
 <VBox fx:id="popupPane"
       visible="false"
       managed="false"
@@ -101,7 +104,7 @@
         <Button text="Add Room" onAction="#onSaveRoomClicked" styleClass="primary-button"/>
     </HBox>
 </VBox>
-
+<!--Popup for deleting a room, the occupied rooms get blocked.-->
 <VBox fx:id="deleteRoomPane"
       visible="false"
       managed="false"

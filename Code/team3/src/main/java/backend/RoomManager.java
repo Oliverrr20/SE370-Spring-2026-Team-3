@@ -7,8 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+//Important class that handles the room database actions used by the room dashboard
 public class RoomManager {
 
+    //Saves a new room when it is created, and shows it as "Available" in the database.
     public void addRoom(Room room){
         if (room == null){
             throw new RuntimeException("Room cannot be null");
@@ -32,7 +34,7 @@ public class RoomManager {
             throw new RuntimeException("Unable to add room: " + e.getMessage(), e);
         }
     }
-
+    //Finds a room using the Id
     public Room getRoom(int id){
         String sql = "SELECT * FROM Room WHERE RoomID = ?";
 
@@ -53,7 +55,7 @@ public class RoomManager {
             throw new RuntimeException("Unable to get room: " + e.getMessage(), e);
         }
     }
-
+    //loads and shows all rooms for the dashboard. 
     public List<Room> getAllRooms() {
         List<Room> rooms = new ArrayList<>();
 
@@ -74,6 +76,7 @@ public class RoomManager {
         return rooms;
     }
 
+    //Used to only load rooms that can be used in assignment (or detetion).
     public List<Room> getAvailableRooms() {
         List<Room> rooms = new ArrayList<>();
 
@@ -94,6 +97,7 @@ public class RoomManager {
         return rooms;
     }
 
+    //Changes the room status 
     public void updateRoomStatus(int id, String status) {
         if (!status.equalsIgnoreCase("Available")
                 && !status.equalsIgnoreCase("Occupied")
@@ -144,6 +148,8 @@ public class RoomManager {
         }
     }
 
+    //As the name tell us, it deletes a room after checking that no patient is assigned in there
+    //Note: didnt think on a better name
     public void deleteRoomAfterSafetyCheck(int roomId) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             connection.setAutoCommit(false);
@@ -174,10 +180,12 @@ public class RoomManager {
         }
     }
 
+    //An old method that is used for compatibility, the most used method is using the dashboard.
     public void removeRoom(int id) {
         deleteRoomAfterSafetyCheck(id);
     }
 
+    //As it names tell us again, it checks the room status before deleting it.
     private String findRoomStatusBeforeDelete(Connection connection, int roomId) throws SQLException {
         String sql = "SELECT RoomStatus FROM Room WHERE RoomID = ? FOR UPDATE";
 
@@ -194,6 +202,7 @@ public class RoomManager {
         }
     }
 
+    //Checks that the room is not connected with a patient (double check)
     private boolean someoneIsStillAssignedToRoom(Connection connection, int roomId) throws SQLException {
         String sql = "SELECT PatientID FROM Patient WHERE RoomID = ? LIMIT 1";
 
@@ -206,6 +215,7 @@ public class RoomManager {
         }
     }
 
+    //After passing all the checks it runs the deletion 
     private void removeTheRoomRecord(Connection connection, int roomId) throws SQLException {
         String sql = "DELETE FROM Room WHERE RoomID = ?";
 
@@ -215,6 +225,7 @@ public class RoomManager {
         }
     }
 
+    //Converts a database row into a room object. 
     private Room mapRoom(ResultSet result) throws SQLException {
         Room room = new Room();
 

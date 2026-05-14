@@ -8,6 +8,7 @@ import backend.RoomManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+//It collects database data, converting it into lists that JavaFX screens use.
 public class HospitalGuiData {
 
     private static final PatientManager patientManager = new PatientManager();
@@ -23,6 +24,7 @@ public class HospitalGuiData {
         return guiRooms;
     }
 
+    //Reloads patients from the database for patient screens
     public static ObservableList<GuiPatient> getPatients() {
         ObservableList<GuiPatient> guiPatients = FXCollections.observableArrayList();
 
@@ -44,7 +46,7 @@ public class HospitalGuiData {
 
         return availableRooms;
     }
-
+    //It finds the room in the Gui that matches with the latest room list.
     public static GuiRoom findRoomById(Integer roomId) {
         if (roomId == null) {
             return null;
@@ -59,6 +61,7 @@ public class HospitalGuiData {
         return null;
     }
 
+    //Builds the room label (It is shown in patient info part)
     public static String getRoomDisplayText(Integer roomId) {
         GuiRoom room = findRoomById(roomId);
 
@@ -89,7 +92,7 @@ public class HospitalGuiData {
     public static void assignPatientToRoom(GuiPatient patient, GuiRoom room) {
         placePatientInRoom(patient, room);
     }
-
+    //Converts backend data patient data into fields that the Gui can display.
     private static GuiPatient convertPatientToGuiPatient(Patient patient) {
         return new GuiPatient(
                 patient.getPatientID(),
@@ -103,7 +106,7 @@ public class HospitalGuiData {
                 patient.getRoomID()
         );
     }
-
+    //Converts backend room data into fields the Gui can display.
     private static GuiRoom convertRoomToGuiRoom(Room room) {
         return new GuiRoom(
                 room.getRoomID(),

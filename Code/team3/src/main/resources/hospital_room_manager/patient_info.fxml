@@ -10,12 +10,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<!--Screen that is used to view and search patient records.-->
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="hospital_room_manager.PatientInfoController"
             styleClass="page-background">
 
     <top>
+    <!--This is the main navigation bar.-->
         <HBox alignment="CENTER_LEFT" spacing="15" styleClass="top-nav">
             <Label text="Hospital Room Manager" styleClass="nav-title"/>
             <Button text="Room Dashboard" onAction="#goToDashboard"/>

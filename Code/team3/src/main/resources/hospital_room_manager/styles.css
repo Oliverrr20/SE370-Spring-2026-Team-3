@@ -1,3 +1,5 @@
+/*This is the main background that uses most of our pages */
+
 .page-background {
     -fx-background-color: #f3f6fb;
     -fx-font-family: "Arial";

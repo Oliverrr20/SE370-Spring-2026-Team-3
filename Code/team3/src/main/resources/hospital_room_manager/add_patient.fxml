@@ -14,12 +14,14 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 
+<!-- It is the screen that staff uses to create a new patient record.-->
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="hospital_room_manager.AddPatientController"
             styleClass="page-background">
 
     <top>
+    <!-- Navegation used across the main app screens-->
         <HBox alignment="CENTER_LEFT" spacing="15" styleClass="top-nav">
             <Label text="Hospital Room Manager" styleClass="nav-title"/>
             <Button text="Room Dashboard" onAction="#goToDashboard"/>
@@ -32,6 +34,7 @@
 
     <center>
         <VBox spacing="20">
+        <!-- Patient form card. The objective is the controller to read these fields when "App patient" is clicked-->
             <VBox alignment="CENTER" spacing="15" styleClass="popup-card">
                 <Label text="Add New Patient" styleClass="popup-title"/>
 

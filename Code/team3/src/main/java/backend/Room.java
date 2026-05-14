@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+//Room data object which matches the columns with the Room table. 
 @Entity
 public class Room {
 
@@ -18,15 +19,18 @@ public class Room {
     private String RoomStatus;
     private String LastUpdated;
 
+    //An empty constructor, used when cases where a room is filled in. 
     public Room() {
     }
 
+    //This constructor is used when nurses or staff add new rooms from the dashboard.
     public Room(int rn, int fn, String type){
         RoomNumber = rn;
         FloorNumber = fn;
         RoomType = type;
         RoomStatus = "Available";
     }
+    //Getters and Setters which purpose is keep controllers from editing fields directly. 
     public int getRoomID(){
         return RoomID;
     }
