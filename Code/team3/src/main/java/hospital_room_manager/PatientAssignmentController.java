@@ -41,14 +41,8 @@ public class PatientAssignmentController {
         updatePreview();
     }
 
-<<<<<<< HEAD
     private void setupPatientConverter() {
         patientComboBox.setConverter(new StringConverter<Patient>() {
-=======
-    //Shows the patient names in the dropdown.
-    private void preparePatientNames() {
-        patientComboBox.setConverter(new StringConverter<GuiPatient>(){
->>>>>>> 411fcdd (Added final details)
             @Override
             public String toString(Patient p) {
                 if (p == null) return "";
@@ -61,14 +55,8 @@ public class PatientAssignmentController {
         });
     }
 
-<<<<<<< HEAD
     private void setupRoomConverter() {
         roomComboBox.setConverter(new StringConverter<Room>() {
-=======
-    //Shows the room details in the room dropdown
-    private void prepareRoomNames() {
-        roomComboBox.setConverter(new StringConverter<GuiRoom>() {
->>>>>>> 411fcdd (Added final details)
             @Override
             public String toString(Room r) {
                 if (r == null) return "";
