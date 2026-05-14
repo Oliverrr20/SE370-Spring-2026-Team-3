@@ -2,6 +2,13 @@ package hospital_room_manager;
 
 import java.io.IOException;
 
+import backend.Patient;
+import backend.PatientManager;
+import backend.Room;
+import backend.RoomManager;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -9,21 +16,20 @@ import javafx.util.StringConverter;
 
 public class PatientAssignmentController {
 
-    @FXML
-    private ComboBox<GuiPatient> patientComboBox;
-    @FXML
-    private ComboBox<GuiRoom> roomComboBox;
-    @FXML
-    private Label selectedPatientLabel;
-    @FXML
-    private Label selectedRoomLabel;
-    @FXML
-    private Label messageLabel;
+    @FXML private ComboBox<Patient> patientComboBox;
+    @FXML private ComboBox<Room> roomComboBox;
+    @FXML private Label selectedPatientLabel;
+    @FXML private Label selectedRoomLabel;
+    @FXML private Label messageLabel;
+
+    private final PatientManager patientManager = new PatientManager();
+    private final RoomManager roomManager = new RoomManager();
 
     @FXML
     private void initialize() {
-        preparePatientNames();
-        prepareRoomNames();
+        setupPatientConverter();
+        setupRoomConverter();
+
         refreshAssignmentChoices();
 
         patientComboBox.setOnAction(event -> updatePreview());
@@ -32,124 +38,110 @@ public class PatientAssignmentController {
         updatePreview();
     }
 
-    private void preparePatientNames() {
-        patientComboBox.setConverter(new StringConverter<GuiPatient>(){
+    private void setupPatientConverter() {
+        patientComboBox.setConverter(new StringConverter<Patient>() {
             @Override
-            public String toString(GuiPatient patient){
-                if (patient == null) {
-                    return "";
-                }
-
-                return patient.getFullName() + " - " + HospitalGuiData.getRoomDisplayText(patient.getRoomId());
+            public String toString(Patient p) {
+                if (p == null) return "";
+                return p.getFirstName() + " " + p.getLastName() +
+                        " (" + formatRoom(p.getRoomID()) + ")";
             }
 
             @Override
-            public GuiPatient fromString(String string){
-                return null;
-            }
+            public Patient fromString(String s) { return null; }
         });
     }
 
-    private void prepareRoomNames() {
-        roomComboBox.setConverter(new StringConverter<GuiRoom>() {
+    private void setupRoomConverter() {
+        roomComboBox.setConverter(new StringConverter<Room>() {
             @Override
-            public String toString(GuiRoom room) {
-                if (room == null) {
-                    return "";
-                }
-
-                return "Room " + room.getRoomNumber()
-                        + " - Floor " + room.getFloorNumber()
-                        + " - " + room.getRoomType();
+            public String toString(Room r) {
+                if (r == null) return "";
+                return "Floor " + r.getFloorNumber() +
+                        " – Room " + r.getRoomNumber() +
+                        " (" + r.getRoomType() + ")";
             }
 
             @Override
-            public GuiRoom fromString(String string) {
-                return null;
-            }
+            public Room fromString(String s) { return null; }
         });
     }
 
     private void refreshAssignmentChoices() {
-        try {
-            patientComboBox.setItems(HospitalGuiData.getPatients());
-            roomComboBox.setItems(HospitalGuiData.getAvailableRooms());
-        } catch (RuntimeException e) {
-            patientComboBox.getItems().clear();
-            roomComboBox.getItems().clear();
-            messageLabel.setText("Couldn't load patient or room data. Please check your database connection.");
-            e.printStackTrace();
+        ObservableList<Patient> unassignedPatients = FXCollections.observableArrayList();
+        for (Patient p : patientManager.getAllPatients()) {
+            if (p.getRoomID() == null) {
+                unassignedPatients.add(p);
+            }
         }
+
+        ObservableList<Room> availableRooms =
+                FXCollections.observableArrayList(roomManager.getAvailableRooms());
+
+        patientComboBox.setItems(unassignedPatients);
+        roomComboBox.setItems(availableRooms);
     }
 
     private void updatePreview() {
-        GuiPatient patient = patientComboBox.getValue();
-        GuiRoom room = roomComboBox.getValue();
+        Patient p = patientComboBox.getValue();
+        Room r = roomComboBox.getValue();
 
-        if (patient == null) {
-            selectedPatientLabel.setText("Patient Selected: None");
-        } else {
-            selectedPatientLabel.setText("Patient Selected: " + patient.getFullName());
-        }
+        selectedPatientLabel.setText(
+                p == null ? "Patient Selected: None"
+                        : "Patient Selected: " + p.getFirstName() + " " + p.getLastName()
+        );
 
-        if (room == null) {
-            selectedRoomLabel.setText("Room Selected: None");
-        } else {
-            selectedRoomLabel.setText("Room Selected: Room " + room.getRoomNumber());
-        }
+        selectedRoomLabel.setText(
+                r == null ? "Room Selected: None"
+                        : "Room Selected: Floor " + r.getFloorNumber() + " – Room " + r.getRoomNumber()
+        );
     }
 
     @FXML
     private void assignPatient() {
-        GuiPatient selectedPatient = patientComboBox.getValue();
-        GuiRoom selectedRoom = roomComboBox.getValue();
+        Patient p = patientComboBox.getValue();
+        Room r = roomComboBox.getValue();
 
-        if (selectedPatient == null || selectedRoom == null) {
+        if (p == null || r == null) {
             messageLabel.setText("Select a patient and an available room.");
             return;
         }
 
         try {
-            HospitalGuiData.placePatientInRoom(selectedPatient, selectedRoom);
+            // Assign patient
+            patientManager.assignPatientToRoom(p.getPatientID(), r.getRoomID());
 
-            messageLabel.setText(selectedPatient.getFullName()
-                    + " has been assigned to Room "
-                    + selectedRoom.getRoomNumber()
-                    + ".");
+            // Mark room as occupied
+            roomManager.updateRoomStatus(r.getRoomID(), "Occupied");
 
-            roomComboBox.setValue(null);
-            patientComboBox.setValue(null);
+            messageLabel.setText(
+                    p.getFirstName() + " " + p.getLastName() +
+                            " has been assigned to Floor " + r.getFloorNumber() +
+                            " – Room " + r.getRoomNumber()
+            );
+
             refreshAssignmentChoices();
             updatePreview();
 
         } catch (RuntimeException e) {
-            messageLabel.setText("Assignment was not saved: " + e.getMessage());
+            messageLabel.setText("Assignment failed: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    @FXML
-    private void goToDashboard() throws IOException {
-        App.setRoot("room_dashboard");
+    private String formatRoom(Integer roomId) {
+        if (roomId == null) return "Unassigned";
+        try {
+            Room r = roomManager.getRoom(roomId);
+            return "Floor " + r.getFloorNumber() + " – Room " + r.getRoomNumber();
+        } catch (Exception e) {
+            return "Unknown Room";
+        }
     }
 
-    @FXML
-    private void goToAssignment() throws IOException {
-        App.setRoot("patient_assignment");
-    }
-
-    @FXML
-    private void goToPatientInfo() throws IOException {
-        App.setRoot("patient_info");
-    }
-
-    @FXML private void goToAddPatient() throws IOException {
-        App.setRoot("add_patient");
-    }
-
-    @FXML
-    private void logout() throws IOException {
-        LoginSession.logout();
-        App.setRoot("login");
-    }
+    @FXML private void goToDashboard() throws IOException { App.setRoot("room_dashboard"); }
+    @FXML private void goToAssignment() throws IOException { App.setRoot("patient_assignment"); }
+    @FXML private void goToPatientInfo() throws IOException { App.setRoot("patient_info"); }
+    @FXML private void goToAddPatient() throws IOException { App.setRoot("add_patient"); }
+    @FXML private void logout() throws IOException { App.setRoot("login"); }
 }

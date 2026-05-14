@@ -281,4 +281,18 @@ public class PatientManager {
 
         return patient;
     }
+    public void assignPatientToRoom(int patientId, int roomId) {
+        String sql = "UPDATE Patient SET RoomID = ?, LastUpdated = NOW() WHERE PatientID = ?";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setInt(1, roomId);
+            statement.setInt(2, patientId);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Unable to assign patient to room: " + e.getMessage(), e);
+        }
+    }
 }

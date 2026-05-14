@@ -2,21 +2,23 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Spinner?>
 
 <StackPane xmlns="http://javafx.com/javafx/8.0.171"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="hospital_room_manager.RoomDashboardController"
             styleClass="page-background">
+
 <BorderPane styleClass="page-background">
     <top>
         <HBox alignment="CENTER_LEFT" spacing="15" styleClass="top-nav">
@@ -36,28 +38,33 @@
 
                 <HBox spacing="15">
                     <VBox styleClass="summary-card">
-                        <Label text="Rooms in total"/>
+                        <Label text="Rooms in total" styleClass="summary-text"/>
                         <Label fx:id="totalRoomsLabel" styleClass="summary-number"/>
                     </VBox>
 
                     <VBox styleClass="summary-card">
-                        <Label text="Available"/>
+                        <Label text="Available" styleClass="summary-text"/>
                         <Label fx:id="availableRoomsLabel" styleClass="summary-number"/>
                     </VBox>
 
                     <VBox styleClass="summary-card">
-                        <Label text="Occupied"/>
+                        <Label text="Occupied" styleClass="summary-text"/>
                         <Label fx:id="occupiedRoomsLabel" styleClass="summary-number"/>
                     </VBox>
 
                     <VBox styleClass="summary-card">
-                        <Label text="Closed"/>
+                        <Label text="Closed" styleClass="summary-text"/>
                         <Label fx:id="closedRoomsLabel" styleClass="summary-number"/>
                     </VBox>
                 </HBox>
 
                 <Label text="Rooms" styleClass="section-title"/>
-                <Button text="+ Add Room" onAction="#openPopup"/>
+
+                <HBox spacing="10">
+                    <Button text="+ Add Room" onAction="#openPopup"/>
+                    <Button text="Delete Room" onAction="#openRoomDeletePopup" styleClass="danger-button"/>
+                </HBox>
+
                 <FlowPane fx:id="roomCardsPane" hgap="15" vgap="15"/>
             </VBox>
         </ScrollPane>
@@ -67,27 +74,50 @@
         <Insets top="20" right="25" bottom="25" left="25"/>
     </padding>
 </BorderPane>
+
 <Rectangle fx:id="overlay"
-           width="Infinity" height="Infinity"
+           width="Infinity"
+           height="Infinity"
            visible="false"
+           managed="false"
            style="-fx-fill: rgba(0,0,0,0.5);" />
 
-<!-- POPUP CARD -->
 <VBox fx:id="popupPane"
       visible="false"
+      managed="false"
       spacing="15"
       alignment="CENTER"
       styleClass="popup-card">
 
     <Label text="Add New Room" styleClass="popup-title"/>
 
-    <Spinner fx:id="roomNumberField" maxWidth="250" />
-    <Spinner fx:id="floorField" maxWidth="250" />
+    <Spinner fx:id="roomNumberField" maxWidth="250"/>
+    <Spinner fx:id="floorField" maxWidth="250"/>
     <TextField fx:id="typeField" promptText="Room Type" maxWidth="250"/>
+    <Label fx:id="messageLabel" styleClass="error-label"/>
 
     <HBox spacing="10">
         <Button text="Cancel" onAction="#closePopup" styleClass="cancel-button"/>
         <Button text="Add Room" onAction="#onSaveRoomClicked" styleClass="primary-button"/>
     </HBox>
 </VBox>
+
+<VBox fx:id="deleteRoomPane"
+      visible="false"
+      managed="false"
+      spacing="15"
+      alignment="CENTER"
+      styleClass="popup-card">
+
+    <Label text="Delete Room" styleClass="popup-title"/>
+    <Label text="Choose a room to delete. Occupied rooms cannot be deleted."/>
+    <ComboBox fx:id="roomChosenForDeleteBox" maxWidth="350"/>
+    <Label fx:id="deleteRoomMessageLabel" styleClass="error-label"/>
+
+    <HBox spacing="10">
+        <Button text="Cancel" onAction="#closeRoomDeletePopup" styleClass="cancel-button"/>
+        <Button text="Delete Room" onAction="#deleteRoomChosenByStaff" styleClass="danger-button"/>
+    </HBox>
+</VBox>
+
 </StackPane>

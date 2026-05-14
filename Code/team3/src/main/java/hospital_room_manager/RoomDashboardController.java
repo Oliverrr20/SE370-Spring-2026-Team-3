@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import backend.Room;
 import backend.RoomManager;
+
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -17,6 +19,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.StringConverter;
 
 public class RoomDashboardController {
+
     @FXML private Label totalRoomsLabel;
     @FXML private Label availableRoomsLabel;
     @FXML private Label occupiedRoomsLabel;
@@ -32,25 +35,25 @@ public class RoomDashboardController {
     @FXML private Label messageLabel;
 
     @FXML private VBox deleteRoomPane;
-    @FXML private ComboBox<GuiRoom> roomChosenForDeleteBox;
+    @FXML private ComboBox<Room> roomChosenForDeleteBox;
     @FXML private Label deleteRoomMessageLabel;
 
-    private RoomManager roomManager = new RoomManager();
+    private final RoomManager roomManager = new RoomManager();
 
     @FXML
     private void initialize() {
         roomNumberField.setValueFactory(
-            new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 1)
         );
 
         floorField.setValueFactory(
-            new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 0)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 50, 0)
         );
 
         roomNumberField.setEditable(true);
         floorField.setEditable(true);
 
-        prepareRoomDeleteDropdown();
+        setupRoomDeleteDropdown();
 
         closePopup();
         closeRoomDeletePopup();
@@ -59,7 +62,8 @@ public class RoomDashboardController {
 
     private void loadDashboard() {
         try {
-            ObservableList<GuiRoom> rooms = HospitalGuiData.getRooms();
+            ObservableList<Room> rooms =
+                    FXCollections.observableArrayList(roomManager.getAllRooms());
 
             int available = 0;
             int occupied = 0;
@@ -67,14 +71,12 @@ public class RoomDashboardController {
 
             roomCardsPane.getChildren().clear();
 
-            for (GuiRoom room : rooms) {
-                if (room.getRoomStatus() != null && room.getRoomStatus().equalsIgnoreCase("Available")) {
-                    available++;
-                } else if (room.getRoomStatus() != null && room.getRoomStatus().equalsIgnoreCase("Occupied")) {
-                    occupied++;
-                } else if (room.getRoomStatus() != null && room.getRoomStatus().equalsIgnoreCase("Closed")) {
-                    closed++;
-                }
+            for (Room room : rooms) {
+                String status = room.getRoomStatus();
+
+                if ("Available".equalsIgnoreCase(status)) available++;
+                else if ("Occupied".equalsIgnoreCase(status)) occupied++;
+                else if ("Closed".equalsIgnoreCase(status)) closed++;
 
                 VBox card = createRoomCard(room);
                 roomCardsPane.getChildren().add(card);
@@ -107,7 +109,7 @@ public class RoomDashboardController {
         }
     }
 
-    private VBox createRoomCard(GuiRoom room) {
+    private VBox createRoomCard(Room room) {
         Label roomNumber = new Label("Room " + room.getRoomNumber());
         roomNumber.getStyleClass().add("room-title");
 
@@ -118,9 +120,10 @@ public class RoomDashboardController {
         VBox card = new VBox(8, roomNumber, floor, type, status);
         card.getStyleClass().add("room-card");
 
-        if (room.getRoomStatus() != null && room.getRoomStatus().equalsIgnoreCase("Available")) {
+        String s = room.getRoomStatus();
+        if ("Available".equalsIgnoreCase(s)) {
             card.getStyleClass().add("available-room");
-        } else if (room.getRoomStatus() != null && room.getRoomStatus().equalsIgnoreCase("Occupied")) {
+        } else if ("Occupied".equalsIgnoreCase(s)) {
             card.getStyleClass().add("occupied-room");
         } else {
             card.getStyleClass().add("closed-room");
@@ -129,14 +132,11 @@ public class RoomDashboardController {
         return card;
     }
 
-    private void prepareRoomDeleteDropdown() {
-        roomChosenForDeleteBox.setConverter(new StringConverter<GuiRoom>() {
+    private void setupRoomDeleteDropdown() {
+        roomChosenForDeleteBox.setConverter(new StringConverter<Room>() {
             @Override
-            public String toString(GuiRoom room) {
-                if (room == null) {
-                    return "";
-                }
-
+            public String toString(Room room) {
+                if (room == null) return "";
                 return "Room " + room.getRoomNumber()
                         + " - Floor " + room.getFloorNumber()
                         + " - " + room.getRoomType()
@@ -144,14 +144,16 @@ public class RoomDashboardController {
             }
 
             @Override
-            public GuiRoom fromString(String string) {
+            public Room fromString(String string) {
                 return null;
             }
         });
     }
 
     private void refillRoomDeleteChoices() {
-        roomChosenForDeleteBox.setItems(HospitalGuiData.getRooms());
+        roomChosenForDeleteBox.setItems(
+                FXCollections.observableArrayList(roomManager.getAllRooms())
+        );
         roomChosenForDeleteBox.setValue(null);
     }
 
@@ -159,48 +161,27 @@ public class RoomDashboardController {
     private void openPopup() {
         closeRoomDeletePopup();
 
-        if (messageLabel != null) {
-            messageLabel.setText("");
-        }
+        if (messageLabel != null) messageLabel.setText("");
 
-        if (overlay != null) {
-            overlay.setVisible(true);
-            overlay.setManaged(true);
-        }
+        overlay.setVisible(true);
+        overlay.setManaged(true);
 
-        if (popupPane != null) {
-            popupPane.setVisible(true);
-            popupPane.setManaged(true);
-        }
+        popupPane.setVisible(true);
+        popupPane.setManaged(true);
     }
 
     @FXML
     private void closePopup() {
-        if (overlay != null) {
-            overlay.setVisible(false);
-            overlay.setManaged(false);
-        }
+        overlay.setVisible(false);
+        overlay.setManaged(false);
 
-        if (popupPane != null) {
-            popupPane.setVisible(false);
-            popupPane.setManaged(false);
-        }
+        popupPane.setVisible(false);
+        popupPane.setManaged(false);
 
-        if (roomNumberField != null) {
-            roomNumberField.getValueFactory().setValue(1);
-        }
-
-        if (floorField != null) {
-            floorField.getValueFactory().setValue(0);
-        }
-
-        if (typeField != null) {
-            typeField.clear();
-        }
-
-        if (messageLabel != null) {
-            messageLabel.setText("");
-        }
+        roomNumberField.getValueFactory().setValue(1);
+        floorField.getValueFactory().setValue(0);
+        typeField.clear();
+        messageLabel.setText("");
     }
 
     @FXML
@@ -209,56 +190,36 @@ public class RoomDashboardController {
 
         try {
             refillRoomDeleteChoices();
+            deleteRoomMessageLabel.setText("");
 
-            if (deleteRoomMessageLabel != null) {
-                deleteRoomMessageLabel.setText("");
-            }
+            overlay.setVisible(true);
+            overlay.setManaged(true);
 
-            if (overlay != null) {
-                overlay.setVisible(true);
-                overlay.setManaged(true);
-            }
-
-            if (deleteRoomPane != null) {
-                deleteRoomPane.setVisible(true);
-                deleteRoomPane.setManaged(true);
-            }
+            deleteRoomPane.setVisible(true);
+            deleteRoomPane.setManaged(true);
 
         } catch (RuntimeException e) {
-            if (deleteRoomMessageLabel != null) {
-                deleteRoomMessageLabel.setText("Couldn't load rooms to delete.");
-            }
+            deleteRoomMessageLabel.setText("Couldn't load rooms to delete.");
             e.printStackTrace();
         }
     }
 
     @FXML
     private void closeRoomDeletePopup() {
-        if (overlay != null) {
-            overlay.setVisible(false);
-            overlay.setManaged(false);
-        }
+        overlay.setVisible(false);
+        overlay.setManaged(false);
 
-        if (deleteRoomPane != null) {
-            deleteRoomPane.setVisible(false);
-            deleteRoomPane.setManaged(false);
-        }
+        deleteRoomPane.setVisible(false);
+        deleteRoomPane.setManaged(false);
 
-        if (roomChosenForDeleteBox != null) {
-            roomChosenForDeleteBox.setValue(null);
-        }
-
-        if (deleteRoomMessageLabel != null) {
-            deleteRoomMessageLabel.setText("");
-        }
+        roomChosenForDeleteBox.setValue(null);
+        deleteRoomMessageLabel.setText("");
     }
 
     @FXML
-    private void onSaveRoomClicked() throws IOException {
-        if (roomNumberField == null || floorField == null || typeField.getText().isBlank()) {
-            if (messageLabel != null) {
-                messageLabel.setText("Please enter a room type.");
-            }
+    private void onSaveRoomClicked() {
+        if (typeField.getText().isBlank()) {
+            messageLabel.setText("Please enter a room type.");
             return;
         }
 
@@ -266,40 +227,33 @@ public class RoomDashboardController {
             int roomNumber = roomNumberField.getValue();
             int floorNumber = floorField.getValue();
 
-            Room newRoom = new Room(
-                roomNumber,
-                floorNumber,
-                typeField.getText().trim()
-            );
-
+            Room newRoom = new Room(roomNumber, floorNumber, typeField.getText().trim());
             roomManager.addRoom(newRoom);
 
             closePopup();
             loadDashboard();
 
         } catch (RuntimeException e) {
-            if (messageLabel != null) {
-                messageLabel.setText("Room was not added: " + e.getMessage());
-            }
+            messageLabel.setText("Room was not added: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     @FXML
     private void deleteRoomChosenByStaff() {
-        GuiRoom roomChosenByStaff = roomChosenForDeleteBox.getValue();
+        Room roomChosen = roomChosenForDeleteBox.getValue();
 
-        if (roomChosenByStaff == null) {
+        if (roomChosen == null) {
             deleteRoomMessageLabel.setText("Please choose a room to delete.");
             return;
         }
 
         try {
-            roomManager.deleteRoomAfterSafetyCheck(roomChosenByStaff.getRoomId());
+            roomManager.deleteRoomAfterSafetyCheck(roomChosen.getRoomID());
 
-            deleteRoomMessageLabel.setText("Room "
-                    + roomChosenByStaff.getRoomNumber()
-                    + " was deleted.");
+            deleteRoomMessageLabel.setText(
+                    "Room " + roomChosen.getRoomNumber() + " was deleted."
+            );
 
             refillRoomDeleteChoices();
             loadDashboard();
@@ -310,29 +264,9 @@ public class RoomDashboardController {
         }
     }
 
-    @FXML
-    private void goToDashboard() throws IOException {
-        loadDashboard();
-    }
-
-    @FXML
-    private void goToAssignment() throws IOException {
-        App.setRoot("patient_assignment");
-    }
-
-    @FXML
-    private void goToPatientInfo() throws IOException {
-        App.setRoot("patient_info");
-    }
-
-    @FXML
-    private void goToAddPatient() throws IOException {
-        App.setRoot("add_patient");
-    }
-
-    @FXML
-    private void logout() throws IOException {
-        LoginSession.logout();
-        App.setRoot("login");
-    }
+    @FXML private void goToDashboard() { loadDashboard(); }
+    @FXML private void goToAssignment() throws IOException { App.setRoot("patient_assignment"); }
+    @FXML private void goToPatientInfo() throws IOException { App.setRoot("patient_info"); }
+    @FXML private void goToAddPatient() throws IOException { App.setRoot("add_patient"); }
+    @FXML private void logout() throws IOException { App.setRoot("login"); }
 }

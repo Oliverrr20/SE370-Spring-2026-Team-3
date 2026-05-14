@@ -78,6 +78,12 @@
     -fx-font-weight: bold;
 }
 
+.danger-button {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
 .summary-card {
     -fx-background-color: white;
     -fx-padding: 18px;
@@ -168,10 +174,12 @@
 .table-view {
     -fx-background-radius: 10px;
 }
-.summary-text{
+
+.summary-text {
     -fx-text-fill: black;
 }
-.input-error{
+
+.input-error {
     -fx-border-color: red;
     -fx-border-width: 2px;
     -fx-border-radius: 6px;
